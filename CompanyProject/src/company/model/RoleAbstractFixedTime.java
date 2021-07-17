@@ -2,10 +2,10 @@ package company.model;
 
 import company.util.JobTime;
 
-public class FixedTimeDepartment extends AbstractDepartment {
-    private static final long serialVersionUID = 9L;
+public class RoleAbstractFixedTime extends RoleAbstract {
+    static final long serialVersionUID = 126L;
 
-    public FixedTimeDepartment(String name, JobTime start) {
+    public RoleAbstractFixedTime(String name, JobTime start) {
         super(name, start);
     }
 
@@ -16,6 +16,6 @@ public class FixedTimeDepartment extends AbstractDepartment {
 
     @Override
     public void setStart(JobTime start) {
-        throw new UnsupportedOperationException("This is Fixed time department");
+        throw new UnsupportedOperationException("This is Fixed time role");
     }
 }

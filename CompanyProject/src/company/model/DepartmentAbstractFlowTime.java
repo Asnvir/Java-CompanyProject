@@ -2,11 +2,11 @@ package company.model;
 
 import company.util.JobTime;
 
-public class FlowTimeDepartment extends AbstractDepartment {
+public class DepartmentAbstractFlowTime extends DepartmentAbstract {
 
     private static final long serialVersionUID = 8L;
 
-    public FlowTimeDepartment(String name, JobTime start) {
+    public DepartmentAbstractFlowTime(String name, JobTime start) {
         super(name, start);
     }
 

@@ -5,13 +5,13 @@ import company.util.JobTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class AbstractDepartment implements Department {
+public abstract class DepartmentAbstract implements Department {
     private JobTime start;
     private String name;
     private List<Role> roles;
 
 
-    public AbstractDepartment(String name, JobTime start) {
+    public DepartmentAbstract(String name, JobTime start) {
         this.start = start;
         this.name = name;
         roles = new ArrayList<>();

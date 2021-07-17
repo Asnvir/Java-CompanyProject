@@ -4,13 +4,13 @@ import company.util.EmployeeType;
 
 import java.io.Serializable;
 
-public class BasePlusPercentEmployee implements EmployeeType, Serializable {
+public class EmployeeBasePlusPercent implements EmployeeType, Serializable {
     static final long serialVersionUID = 123L;
 
     private final double monthSalary;
     private double bonusPercentSum;
 
-    public BasePlusPercentEmployee(double monthSalary, double percent) {
+    public EmployeeBasePlusPercent(double monthSalary, double percent) {
         this.monthSalary = monthSalary;
         this.bonusPercentSum = percent;
     }

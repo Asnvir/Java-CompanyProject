@@ -2,10 +2,10 @@ package company.model;
 
 import company.util.JobTime;
 
-public class FlowTimeRole extends AbstractRole {
+public class RoleAbstractFlowTime extends RoleAbstract {
     static final long serialVersionUID = 125L;
 
-    public FlowTimeRole(String name, JobTime start) {
+    public RoleAbstractFlowTime(String name, JobTime start) {
         super(name, start);
     }
 

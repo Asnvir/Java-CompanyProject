@@ -6,7 +6,7 @@ import java.io.Serializable;
 
 public class Employee implements Serializable {
     private static final long serialVersionUID = 10L;
-
+    //private String name - должно ведь быть?
     private Preference preference;
     private EmployeeType type;
 

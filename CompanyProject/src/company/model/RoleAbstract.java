@@ -4,14 +4,14 @@ import company.util.JobTime;
 
 import java.io.Serializable;
 
-public abstract class AbstractRole implements Serializable, Role {
+public abstract class RoleAbstract implements Serializable, Role {
     static final long serialVersionUID = 124L;
 
     private String name;
     private JobTime start;
     private Employee employee;
 
-    public AbstractRole(String name, JobTime start) {
+    public RoleAbstract(String name, JobTime start) {
         this.name = name;
         this.start = start;
     }
