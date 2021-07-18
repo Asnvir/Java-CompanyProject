@@ -2,6 +2,7 @@ package company;
 
 import company.model.DepartmentAbstract;
 import company.model.Employee;
+import company.model.Preference;
 import company.model.RoleAbstract;
 import company.util.JobTime;
 import javafx.application.Application;
@@ -9,6 +10,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
@@ -20,7 +22,7 @@ import javafx.stage.Stage;
 public class Main extends Application {
     //Department
     private ListView<DepartmentAbstract> departmentsListView;
-    private TableView<RoleAbstract> detailsOfDepartmentTable;
+    private TableView<RoleAbstract> departmentDetailTable;
     private ListView<? extends RoleAbstract> rolesByDepartmentListView;
     private TextField nameOfDepartmentTextField;
     private TextField startTimeOfDepartmentTextField;
@@ -29,16 +31,25 @@ public class Main extends Application {
     private CheckBox synchronisableDepartmentChckBox;
     private ComboBox departmentCMBoxDepartTab;
     private ComboBox roleCMBoxDepartTab;
-    //Roles
+    //Role
     private ListView<RoleAbstract> rolesListView;
     private TableView<RoleAbstract> detailsOfRoleTable;
     private ListView<? extends Employee> employeesByRoleListView;
     private TextField nameOfRoleTextField;
     private TextField startTimeOfRoleTextField;
     private TextField endTimeOfRoleTextField;
-    private CheckBox  changeableTimeOfRoleChckBox;
-    private ComboBox  roleCMBoxRoleTab;
-    private ComboBox  employeeCMBoxRoleTab;
+    private CheckBox changeableTimeOfRoleChckBox;
+    private ComboBox roleCMBoxRoleTab;
+    private ComboBox employeeCMBoxRoleTab;
+    //Employee
+    private  ListView<Employee> employeeListView;
+    private TableView<Employee> employeeDetailTable;
+    private TextField nameOfEmployeeTextField;
+    private ComboBox preferenceOfEmployeeCMbox;
+    private ComboBox typeOfSalaryCMbox;
+    private ComboBox roleOfEmployeeCMbox;
+    private TextField startTimeOfEmployeeTextField;
+    private TextField endTimeOfEmployeeTextField;
 
     public static void main(String[] args) {
         launch(args);
@@ -46,14 +57,14 @@ public class Main extends Application {
 
     public void start(Stage primaryStage) throws Exception {
 //Configure the main BoarderPane
-        BorderPane root = new BorderPane();
-        root.setMinWidth(1150);
-        root.setPrefWidth(1150);
-        root.setMinHeight(800);
-        root.setPrefHeight(800);
+        BorderPane rootPane = new BorderPane();
+        rootPane.setMinWidth(1150);
+        rootPane.setPrefWidth(1150);
+        rootPane.setMinHeight(800);
+        rootPane.setPrefHeight(800);
 
         VBox topRootVbox = new VBox();
-        root.setTop(topRootVbox);
+
 //HBbox  with calc and show buttons
         HBox hboxWithBtns = new HBox();
         hboxWithBtns.setPadding(new Insets(10));
@@ -66,16 +77,16 @@ public class Main extends Application {
             }
         });
 
-        Button showResultsPerEmployeesBtn = new Button("Show results per employee");
-        showResultsPerEmployeesBtn.setOnAction(new EventHandler<ActionEvent>() {
+        Button showResultsPerEmployeeBtn = new Button("Show results per employee");
+        showResultsPerEmployeeBtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
 
             }
         });
 
-        Button showResultsPerDepartmentsBtn = new Button("Show results per departments");
-        showResultsPerDepartmentsBtn.setOnAction(new EventHandler<ActionEvent>() {
+        Button showResultsPerDepartmentBtn = new Button("Show results per departments");
+        showResultsPerDepartmentBtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
 
@@ -90,7 +101,7 @@ public class Main extends Application {
             }
         });
 
-        hboxWithBtns.getChildren().addAll(calculateBtn, showResultsPerEmployeesBtn, showResultsPerDepartmentsBtn, showResultsPerCompanyBtn);
+        hboxWithBtns.getChildren().addAll(calculateBtn, showResultsPerEmployeeBtn, showResultsPerDepartmentBtn, showResultsPerCompanyBtn);
         topRootVbox.getChildren().addAll(hboxWithBtns);
 
 //Creation of the rootTabPane
@@ -104,6 +115,7 @@ public class Main extends Application {
 
         Tab departmentTab = new Tab("Department");
         departmentTab.setClosable(false);
+
         //departmentsBorderPane
         BorderPane departmentBorderPane = new BorderPane();
         departmentBorderPane.setMinWidth(1150);
@@ -112,16 +124,12 @@ public class Main extends Application {
 //        departmentBorderPane.setPrefHeight(716);
         Label departmentsDetailedInfoLbl = new Label("Department's detailed information");
         departmentsDetailedInfoLbl.setFont(new Font(18));
-        BorderPane.setAlignment(departmentBorderPane, Pos.CENTER);
-
-        Label departmentsLabel = new Label("Departments");
-        departmentsLabel.setFont(new Font(18));
-        departmentBorderPane.setAlignment(departmentsLabel, Pos.CENTER);  //TODO departmentsBorderPane.setAlignment или BorderPane.setAlignment тот же самый вопрос и в RolesTab
+        BorderPane.setAlignment(departmentsDetailedInfoLbl, Pos.CENTER); //TODO departmentsBorderPane.setAlignment или BorderPane.setAlignment тот же самый вопрос и в RolesTab
 
 
         //Start creation of big table of department's details
 
-        //departmentsListView  (List Of departments by names)
+        //departmentsListView  (List Of departments by name)
         departmentsListView = new ListView<>();
         departmentsListView.setMinWidth(200);
         departmentsListView.setPrefWidth(200);
@@ -129,40 +137,43 @@ public class Main extends Application {
 //        departmentsListView.setPrefHeight(579);
 
 
-        //detailsOfDepartment TableView (Table of department's details)
-        detailsOfDepartmentTable = new TableView<>();
-        detailsOfDepartmentTable.setMinWidth(750);
-        detailsOfDepartmentTable.setPrefWidth(750);
+        //departmentsDetailTable TableView (Table of department's details)
+        departmentDetailTable = new TableView<>();
+        departmentDetailTable.setMinWidth(750);
+        departmentDetailTable.setPrefWidth(750);
 
 
-        //Department's name Column                //TODO по идее эта колонка на требуется так как в 79 строке объявили departmentsListView, в котором будет отоброжаться имя department'a
+        //Department's name Column
         TableColumn<DepartmentAbstract, String> nameOfDepartmentColumn = new TableColumn<>("Name");
         nameOfDepartmentColumn.setMinWidth(231);
         nameOfDepartmentColumn.setPrefWidth(231);
         nameOfDepartmentColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
 
         //Department's start time column
-        TableColumn<DepartmentAbstract, JobTime> startTimeOfDepartmentColumn = new TableColumn<>("Start time");
+        TableColumn<DepartmentAbstract, Integer> startTimeOfDepartmentColumn = new TableColumn<>("Start time");
         startTimeOfDepartmentColumn.setMinWidth(125);
         startTimeOfDepartmentColumn.setPrefWidth(125);
         startTimeOfDepartmentColumn.setCellValueFactory(new PropertyValueFactory<>("start"));
+
         //Department's end time column
-        TableColumn<DepartmentAbstract, JobTime> endTimeOfDepartmentColumn = new TableColumn<>("End time");
+        TableColumn<DepartmentAbstract, Integer> endTimeOfDepartmentColumn = new TableColumn<>("End time");
         endTimeOfDepartmentColumn.setMinWidth(120);
         endTimeOfDepartmentColumn.setPrefWidth(120);
         endTimeOfDepartmentColumn.setCellValueFactory(new PropertyValueFactory<>("end"));   //TODO продумать где прописать endTime of department
+
         //Department's changeable time column
         TableColumn<DepartmentAbstract, Boolean> changeableTimeDepartmentColumn = new TableColumn<>("Changeable time"); //TODO прописать где-то в полях объекта department или можно менять часы работы true/false
         changeableTimeDepartmentColumn.setMinWidth(121);
         changeableTimeDepartmentColumn.setPrefWidth(121);
         changeableTimeDepartmentColumn.setCellValueFactory(new PropertyValueFactory<>("прописать свойство"));
+
         //Department's synchronisable column
         TableColumn<DepartmentAbstract, Boolean> synchronisableDepartmentColumn = new TableColumn<>("Synchronisable");
         synchronisableDepartmentColumn.setMinWidth(97);
         synchronisableDepartmentColumn.setPrefWidth(97);
         synchronisableDepartmentColumn.setCellValueFactory(new PropertyValueFactory<>("прописать свойство"));//TODO прописать где-то в полях объекта department требует ли department синхронизированной работы сотрудников true/false
 
-        detailsOfDepartmentTable.getColumns().addAll(nameOfDepartmentColumn,startTimeOfDepartmentColumn, endTimeOfDepartmentColumn, changeableTimeDepartmentColumn, synchronisableDepartmentColumn);
+        departmentDetailTable.getColumns().addAll(nameOfDepartmentColumn, startTimeOfDepartmentColumn, endTimeOfDepartmentColumn, changeableTimeDepartmentColumn, synchronisableDepartmentColumn);
 
         //rolesByDepartment ListView (List of department's roles)
         rolesByDepartmentListView = new ListView<>();
@@ -171,13 +182,14 @@ public class Main extends Application {
 
         //end creation of big table of department's details
 
-        //VBox bottonRootVboxOfDepartment that consistf 2 hboxes - 1 for creation of department - 2nd foradding a role to department
+        //VBox bottonRootVboxOfDepartment that consists 2 hboxes - 1 for department creation - 2nd for adding a role to department
         VBox bottonRootVboxOfDepartment = new VBox();
         bottonRootVboxOfDepartment.setMinWidth(1150);
         bottonRootVboxOfDepartment.setPrefWidth(1150);
 //        bottonRootVboxOfDepartment.setMinHeight(110);
 //        bottonRootVboxOfDepartment.setPrefHeight(110);
         bottonRootVboxOfDepartment.setPadding(new Insets(10));
+
         //HBox of department's creation
         HBox departmentCreationHBox = new HBox();
         departmentCreationHBox.setMinWidth(1140);
@@ -217,7 +229,7 @@ public class Main extends Application {
         roleAddingToDepartmentHbox.setPadding(new Insets(5));
         roleAddingToDepartmentHbox.setAlignment(Pos.CENTER_LEFT);
 
-        Label addRoleToDepartment = new Label("Add a role to department : ");
+        Label addRoleToDepartmentLabel = new Label("Add a role to department : ");
         departmentCMBoxDepartTab = new ComboBox();
         departmentCMBoxDepartTab.setPromptText("Department");
         roleCMBoxDepartTab = new ComboBox();
@@ -229,38 +241,38 @@ public class Main extends Application {
 
             }
         });
-        roleAddingToDepartmentHbox.getChildren().addAll(addRoleToDepartment, departmentCMBoxDepartTab, roleCMBoxDepartTab, addRoleToDepartmentBtn);
+        roleAddingToDepartmentHbox.getChildren().addAll(addRoleToDepartmentLabel, departmentCMBoxDepartTab, roleCMBoxDepartTab, addRoleToDepartmentBtn);
 
         bottonRootVboxOfDepartment.getChildren().addAll(departmentCreationHBox, roleAddingToDepartmentHbox);
 
 
-        //TODO не знаю как это называется но сделать окошко для endTimeOfDepartment, которое нельзя изменять и в нем будет показано конец работы departament'a +9 часов относительно startTimeOfDepartment, которое ввели ранее
-
-
         //Construct the departmentsBorderPane
-        departmentBorderPane.setTop(departmentsLabel);
+        departmentBorderPane.setTop(departmentsDetailedInfoLbl);
         departmentBorderPane.setLeft(departmentsListView);
-        departmentBorderPane.setCenter(detailsOfDepartmentTable);
+        departmentBorderPane.setCenter(departmentDetailTable);
         departmentBorderPane.setRight(rolesByDepartmentListView);
         departmentBorderPane.setBottom(bottonRootVboxOfDepartment);
+
+        //Construct the departmentTab
+        departmentTab.setContent(departmentBorderPane);
 
 
 //End of Department Tab
 
 //Start Of Roles Tab
 
-        Tab rolesTab = new Tab("Roles");
-        rolesTab.setClosable(false);
+        Tab roleTab = new Tab("Roles");
+        roleTab.setClosable(false);
 
         //rolesBorderPane
-        BorderPane rolesBorderPane = new BorderPane();
-        rolesBorderPane.setMinWidth(1150);
-        rolesBorderPane.setPrefWidth(1150);
+        BorderPane roleBorderPane = new BorderPane();
+        roleBorderPane.setMinWidth(1150);
+        roleBorderPane.setPrefWidth(1150);
 //       rolesBorderPane.setMinHeight(716);
 //       rolesBorderPane.setPrefHeight(716);
-        Label rolesLabel = new Label("Roles");
+        Label rolesLabel = new Label("Role's detailed information");
         rolesLabel.setFont(new Font(18));
-        rolesBorderPane.setAlignment(rolesLabel, Pos.CENTER);
+        BorderPane.setAlignment(rolesLabel, Pos.CENTER);  //TODO rolesBorderPane.setAlignment или BorderPane.setAlignment
 
         //rolesListView ( List of roles by names)
         rolesListView = new ListView<>();
@@ -279,19 +291,19 @@ public class Main extends Application {
 
 
         //Role's name column
-        TableColumn<RoleAbstract, JobTime> nameOfRoleColumn = new TableColumn<>("Name");
+        TableColumn<RoleAbstract, String> nameOfRoleColumn = new TableColumn<>("Name");
         nameOfRoleColumn.setMinWidth(420);
         nameOfRoleColumn.setPrefWidth(420);
         nameOfRoleColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
 
         //Role's start time column
-        TableColumn<RoleAbstract, JobTime> startTimeOfRoleColumn = new TableColumn<>("Start time");
+        TableColumn<RoleAbstract, Integer> startTimeOfRoleColumn = new TableColumn<>("Start time");
         startTimeOfRoleColumn.setMinWidth(101);
         startTimeOfRoleColumn.setPrefWidth(101);
         startTimeOfRoleColumn.setCellValueFactory(new PropertyValueFactory<>("start"));
 
         //Role's end time column
-        TableColumn<RoleAbstract, JobTime> endTimeOfRoleColumn = new TableColumn<>("End time");
+        TableColumn<RoleAbstract, Integer> endTimeOfRoleColumn = new TableColumn<>("End time");
         endTimeOfRoleColumn.setMinWidth(119);
         endTimeOfRoleColumn.setPrefWidth(119);
         endTimeOfRoleColumn.setCellValueFactory(new PropertyValueFactory<>("end"));   //TODO продумать где прописать endTime of department
@@ -303,7 +315,7 @@ public class Main extends Application {
         changeableTimeRoleColumn.setPrefWidth(106);
         changeableTimeRoleColumn.setCellValueFactory(new PropertyValueFactory<>("прописать свойство"));
 
-        detailsOfRoleTable.getColumns().addAll(nameOfRoleColumn,startTimeOfRoleColumn,endTimeOfRoleColumn,changeableTimeRoleColumn);
+        detailsOfRoleTable.getColumns().addAll(nameOfRoleColumn, startTimeOfRoleColumn, endTimeOfRoleColumn, changeableTimeRoleColumn);
 
         //employeesByRole ListView ( Lise of role's employees )
         employeesByRoleListView = new ListView<>();
@@ -318,6 +330,7 @@ public class Main extends Application {
         bottonRootVboxOfRole.setPrefWidth(1150);
 //        bottonRootVboxOfRole.setMinHeight(110);
 //        bottonRootVboxOfRole.setPrefHeight(110);
+
         //HBOX of role's creation
         HBox roleCreationHBox = new HBox();
         roleCreationHBox.setMinWidth(1140);
@@ -328,7 +341,7 @@ public class Main extends Application {
         roleCreationHBox.setPadding(new Insets(5));
         roleCreationHBox.setAlignment(Pos.CENTER_LEFT);
 
-        Label newRoleLabel = new Label("New role");
+        Label newRoleLabel = new Label("New role : ");
         nameOfRoleTextField = new TextField();
         nameOfRoleTextField.setPromptText("Name");
         startTimeOfRoleTextField = new TextField();
@@ -340,13 +353,13 @@ public class Main extends Application {
         createRoleBtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                
+
             }
         });
 
-        roleCreationHBox.getChildren().addAll(newRoleLabel,nameOfRoleTextField,startTimeOfRoleTextField,endTimeOfRoleTextField,changeableTimeOfRoleChckBox,createRoleBtn);
+        roleCreationHBox.getChildren().addAll(newRoleLabel, nameOfRoleTextField, startTimeOfRoleTextField, endTimeOfRoleTextField, changeableTimeOfRoleChckBox, createRoleBtn);
 
-       //HBox adding an employee to Role
+        //HBox adding an employee to Role
         HBox employeeAddingToRoleHbox = new HBox();
         employeeAddingToRoleHbox.setMinWidth(1140);
         employeeAddingToRoleHbox.setPrefWidth(1140);
@@ -356,7 +369,7 @@ public class Main extends Application {
         employeeAddingToRoleHbox.setPadding(new Insets(5));
         roleAddingToDepartmentHbox.setAlignment(Pos.CENTER_LEFT);
 
-        Label addEmployeeToRole = new Label("Add an employee to role : ");
+        Label addEmployeeToRoleLabel = new Label("Add an employee to role : ");
         roleCMBoxRoleTab = new ComboBox();
         roleCMBoxRoleTab.setPromptText("Role");
         employeeCMBoxRoleTab = new ComboBox();
@@ -368,20 +381,146 @@ public class Main extends Application {
 
             }
         });
-        employeeAddingToRoleHbox.getChildren().addAll(addEmployeeToRole,roleCMBoxRoleTab,employeeCMBoxRoleTab,addEmployeeToRoleBtn);
+        employeeAddingToRoleHbox.getChildren().addAll(addEmployeeToRoleLabel, roleCMBoxRoleTab, employeeCMBoxRoleTab, addEmployeeToRoleBtn);
 
-        bottonRootVboxOfRole.getChildren().addAll(roleCreationHBox,employeeAddingToRoleHbox);
-
-
+        bottonRootVboxOfRole.getChildren().addAll(roleCreationHBox, employeeAddingToRoleHbox);
 
 
         //Construct the rolesBorderPane
-        rolesBorderPane.setTop(rolesLabel);
-        rolesBorderPane.setLeft(rolesListView);
-        rolesBorderPane.setCenter(detailsOfRoleTable);
-        rolesBorderPane.setRight(employeesByRoleListView);
-        rolesBorderPane.setBottom(bottonRootVboxOfRole);
+        roleBorderPane.setTop(rolesLabel);
+        roleBorderPane.setLeft(rolesListView);
+        roleBorderPane.setCenter(detailsOfRoleTable);
+        roleBorderPane.setRight(employeesByRoleListView);
+        roleBorderPane.setBottom(bottonRootVboxOfRole);
+
+        //Construct the roleTab
+        roleTab.setContent(roleBorderPane); //TODO не уверен или так собирается Tab
 
 //End of Role Tab
+
+//Start of employee Tab
+
+        Tab employeeTab = new Tab("Employee");
+        employeeTab.setClosable(false);
+
+        //employeeBorderPane
+        BorderPane employeeBorderPane = new BorderPane();
+        employeeBorderPane.setMinWidth(1150);
+        employeeBorderPane.setPrefWidth(1150);
+//        employeeBorderPane.setMinHeight(716);
+//        employeeBorderPane.setPrefHeight(716);
+        Label employeeLabel = new Label("Employee's detailed information");
+        employeeLabel.setFont(new Font(18));
+        BorderPane.setAlignment(employeeLabel,Pos.CENTER);
+
+        //Start creation of big table of employee's details
+
+        //employeeListView (List of employees by name)
+        employeeListView = new ListView<>();
+        employeeListView.setMinWidth(200);
+        employeeListView.setPrefWidth(200);
+//        employeeListView.setMinHeight(634);
+//        employeeListView.setPrefHeight(634);
+
+        //employeeDetailTable TableView (Table of department's details)
+        employeeDetailTable = new TableView<>();
+        employeeDetailTable.setMinWidth(950);
+        employeeDetailTable.setPrefWidth(950);
+//        employeeDetailTable.setMinHeight(634);
+//        employeeDetailTable.setPrefHeight(634);
+
+        //employee's name column
+        TableColumn <Employee, String> nameOfEmployeeColumn = new TableColumn<>("Name");
+        nameOfEmployeeColumn.setMinWidth(182);
+        nameOfEmployeeColumn.setPrefWidth(182);
+        nameOfEmployeeColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+
+        //employee's preference column
+        TableColumn<Employee, String> preferenceOfEmployeeColumn = new TableColumn<>("Preference");
+        preferenceOfEmployeeColumn.setMinWidth(204);
+        preferenceOfEmployeeColumn.setPrefWidth(204);
+        preferenceOfEmployeeColumn.setCellValueFactory(new PropertyValueFactory<>("preference"));
+
+        //employee's type of salary column
+        TableColumn<Employee,String> typeOfEmployeeColumn = new TableColumn<>("Type of salary");
+        typeOfEmployeeColumn.setMinWidth(185);
+        typeOfEmployeeColumn.setPrefWidth(185);
+        typeOfEmployeeColumn.setCellValueFactory(new PropertyValueFactory<>("type"));
+
+        //employee's role column
+        TableColumn<Employee,String> roleOfEmployeeColumn = new TableColumn<>("Role");
+        roleOfEmployeeColumn.setMinWidth(197);
+        roleOfEmployeeColumn.setPrefWidth(197);
+        roleOfEmployeeColumn.setCellValueFactory(new PropertyValueFactory<>("role"));
+
+        //employee's start time column
+        TableColumn<Employee,Integer> startTimeOfEmployeeColumn = new TableColumn<>("Start time");
+        startTimeOfEmployeeColumn.setMinWidth(92);
+        startTimeOfEmployeeColumn.setPrefWidth(92);
+        startTimeOfEmployeeColumn.setCellValueFactory(new PropertyValueFactory<>("startTime"));
+
+        //employee's end time column
+        TableColumn<Employee,Integer> endTimeOfEmployeeColumn = new TableColumn<>("End time");
+        endTimeOfEmployeeColumn.setMinWidth(92);
+        endTimeOfEmployeeColumn.setPrefWidth(92);
+        endTimeOfEmployeeColumn.setCellValueFactory(new PropertyValueFactory<>("endTime"));
+
+        employeeDetailTable.getColumns().addAll(nameOfEmployeeColumn,preferenceOfEmployeeColumn,typeOfEmployeeColumn,roleOfEmployeeColumn,startTimeOfEmployeeColumn,endTimeOfEmployeeColumn);
+
+        //HBox of creating an employee
+        HBox employeeCreationHBox = new HBox();
+        employeeCreationHBox.setMinWidth(1140);
+        employeeCreationHBox.setPrefWidth(1140);
+//        employeeCreationHBox.setMinHeight(45);
+//        employeeCreationHBox.setPrefHeight(45);
+        employeeCreationHBox.setSpacing(10.0);
+        employeeCreationHBox.setPadding(new Insets(5));
+        employeeCreationHBox.setAlignment(Pos.CENTER_LEFT);
+
+        Label newEmployeeLabel = new Label("New employee : ");
+        nameOfEmployeeTextField = new TextField();
+        nameOfEmployeeTextField.setPromptText("Name");
+        preferenceOfEmployeeCMbox = new ComboBox();
+        preferenceOfEmployeeCMbox.setPromptText("Preference");
+        typeOfSalaryCMbox = new ComboBox();
+        typeOfSalaryCMbox.setPromptText("Type of salary");
+        startTimeOfEmployeeTextField = new TextField();
+        roleOfEmployeeCMbox = new ComboBox();
+        roleOfEmployeeCMbox.setPromptText("Role");
+        startTimeOfEmployeeTextField.setPromptText("Start time");
+        endTimeOfEmployeeTextField = new TextField();
+        endTimeOfEmployeeTextField.setPromptText("End Time");
+        Button createEmployeeBtn = new Button("Create");
+        createEmployeeBtn.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+
+            }
+        });
+
+        employeeCreationHBox.getChildren().addAll(newEmployeeLabel,nameOfEmployeeTextField,preferenceOfEmployeeCMbox,typeOfSalaryCMbox,roleOfEmployeeCMbox,startTimeOfEmployeeTextField,endTimeOfEmployeeTextField,createEmployeeBtn);
+
+        //Construct the employeeBorderPane
+        employeeBorderPane.setTop(employeeLabel);
+        employeeBorderPane.setLeft(employeeListView);
+        employeeBorderPane.setCenter(employeeDetailTable);
+        employeeBorderPane.setBottom(employeeCreationHBox);
+
+        //Construct the employee Tab
+        employeeTab.setContent(employeeBorderPane);
+//End of employee Tab
+
+//Construct the root Tab Pane - rootTabPane
+        rootTabPane.getTabs().add(departmentTab);
+        rootTabPane.getTabs().add(roleTab);
+        rootTabPane.getTabs().add(employeeTab);
+
+//Construct the root border pane - rootPane
+        rootPane.setTop(topRootVbox);
+        rootPane.setCenter(rootTabPane);
+
+//Construct the stage
+        primaryStage.setScene(new Scene(rootPane, 1150, 800 ));
+        primaryStage.show();
     }
 }
