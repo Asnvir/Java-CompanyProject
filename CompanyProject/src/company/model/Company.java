@@ -7,14 +7,24 @@ import java.util.List;
 public class Company implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    private List<Department> departments = new ArrayList<>();
+    private List<DepartmentInterface> departments = new ArrayList<>();
 
-    public void add(Department department) {
+    private List<Role> roles = new ArrayList<>();
+
+    private List<Employee> employees = new ArrayList<>();
+
+    public void add(DepartmentInterface department) {
         departments.add(department);
     }
 
-    public List<Department> getDepartments() {
+    public List<DepartmentInterface> getDepartments() {
         return departments;
+    }
+
+    public void addEmployee(Employee employee, DepartmentInterface department, Role role) {
+        employees.add(employee);
+        department.addEmployee(employee);
+        //role.addEmployee(employee);
     }
 
 }

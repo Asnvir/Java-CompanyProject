@@ -1,10 +1,8 @@
 package company;
 
-import company.model.DepartmentAbstract;
+import company.model.Department;
 import company.model.Employee;
-import company.model.Preference;
 import company.model.RoleAbstract;
-import company.util.JobTime;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -20,8 +18,11 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 public class Main extends Application {
+
+    public static final int HOURS_IN_MONTHS = 160;
+
     //Department
-    private ListView<DepartmentAbstract> departmentsListView;
+    private ListView<Department> departmentsListView;
     private TableView<RoleAbstract> departmentDetailTable;
     private ListView<? extends RoleAbstract> rolesByDepartmentListView;
     private TextField nameOfDepartmentTextField;
@@ -34,7 +35,7 @@ public class Main extends Application {
     //Role
     private ListView<RoleAbstract> rolesListView;
     private TableView<RoleAbstract> detailsOfRoleTable;
-    private ListView<? extends Employee> employeesByRoleListView;
+    private ListView<Employee> employeesByRoleListView;
     private TextField nameOfRoleTextField;
     private TextField startTimeOfRoleTextField;
     private TextField endTimeOfRoleTextField;
@@ -144,36 +145,36 @@ public class Main extends Application {
 
 
         //Department's name Column
-        TableColumn<DepartmentAbstract, String> nameOfDepartmentColumn = new TableColumn<>("Name");
+        TableColumn<Department, String> nameOfDepartmentColumn = new TableColumn<>("Name");
         nameOfDepartmentColumn.setMinWidth(231);
         nameOfDepartmentColumn.setPrefWidth(231);
         nameOfDepartmentColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
 
         //Department's start time column
-        TableColumn<DepartmentAbstract, Integer> startTimeOfDepartmentColumn = new TableColumn<>("Start time");
+        TableColumn<Department, Integer> startTimeOfDepartmentColumn = new TableColumn<>("Start time");
         startTimeOfDepartmentColumn.setMinWidth(125);
         startTimeOfDepartmentColumn.setPrefWidth(125);
         startTimeOfDepartmentColumn.setCellValueFactory(new PropertyValueFactory<>("start"));
 
         //Department's end time column
-        TableColumn<DepartmentAbstract, Integer> endTimeOfDepartmentColumn = new TableColumn<>("End time");
+        TableColumn<Department, Integer> endTimeOfDepartmentColumn = new TableColumn<>("End time");
         endTimeOfDepartmentColumn.setMinWidth(120);
         endTimeOfDepartmentColumn.setPrefWidth(120);
         endTimeOfDepartmentColumn.setCellValueFactory(new PropertyValueFactory<>("end"));   //TODO продумать где прописать endTime of department
 
         //Department's changeable time column
-        TableColumn<DepartmentAbstract, Boolean> changeableTimeDepartmentColumn = new TableColumn<>("Changeable time"); //TODO прописать где-то в полях объекта department или можно менять часы работы true/false
+        TableColumn<Department, Boolean> changeableTimeDepartmentColumn = new TableColumn<>("Changeable time"); //TODO прописать где-то в полях объекта department или можно менять часы работы true/false
         changeableTimeDepartmentColumn.setMinWidth(121);
         changeableTimeDepartmentColumn.setPrefWidth(121);
         changeableTimeDepartmentColumn.setCellValueFactory(new PropertyValueFactory<>("прописать свойство"));
 
         //Department's synchronisable column
-        TableColumn<DepartmentAbstract, Boolean> synchronisableDepartmentColumn = new TableColumn<>("Synchronisable");
+        TableColumn<Department, Boolean> synchronisableDepartmentColumn = new TableColumn<>("Synchronisable");
         synchronisableDepartmentColumn.setMinWidth(97);
         synchronisableDepartmentColumn.setPrefWidth(97);
         synchronisableDepartmentColumn.setCellValueFactory(new PropertyValueFactory<>("прописать свойство"));//TODO прописать где-то в полях объекта department требует ли department синхронизированной работы сотрудников true/false
 
-        departmentDetailTable.getColumns().addAll(nameOfDepartmentColumn, startTimeOfDepartmentColumn, endTimeOfDepartmentColumn, changeableTimeDepartmentColumn, synchronisableDepartmentColumn);
+        //departmentDetailTable.getColumns().addAll(nameOfDepartmentColumn, startTimeOfDepartmentColumn, endTimeOfDepartmentColumn, changeableTimeDepartmentColumn, synchronisableDepartmentColumn);
 
         //rolesByDepartment ListView (List of department's roles)
         rolesByDepartmentListView = new ListView<>();
@@ -524,3 +525,13 @@ public class Main extends Application {
         primaryStage.show();
     }
 }
+
+//todo
+//  1. Имена ?
+//  2. Company (1) -> (M) Department
+//  3. Company (1) -> (M) Role
+//  4. Company (1) -> (M) Employee
+//  5. Department (1) -> (M) Employee
+//  6. Role (1) -> (M) Employee
+//  7. Employee (1) -> (1) Preference
+//  8. Role (1) -> (1) Preference ?????

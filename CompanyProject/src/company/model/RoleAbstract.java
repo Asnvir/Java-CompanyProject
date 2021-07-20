@@ -1,5 +1,7 @@
 package company.model;
 
+import company.model2.WorkType;
+import company.model2.WorkingTime;
 import company.util.JobTime;
 
 import java.io.Serializable;
@@ -8,10 +10,10 @@ public abstract class RoleAbstract implements Serializable, Role {
     static final long serialVersionUID = 124L;
 
     private String name;
-    private JobTime start;
+    private WorkingTime start;
     private Employee employee;
 
-    public RoleAbstract(String name, JobTime start) {
+    public RoleAbstract(String name, WorkingTime start) {
         this.name = name;
         this.start = start;
     }
@@ -24,7 +26,7 @@ public abstract class RoleAbstract implements Serializable, Role {
         this.employee = employee;
     }
 
-    public JobTime startTime() {
+    public WorkingTime startTime() {
         return start;
     }
 
@@ -32,7 +34,7 @@ public abstract class RoleAbstract implements Serializable, Role {
         return name;
     }
 
-    public void setStart(JobTime start) {
+    public void setStart(WorkingTime start) {
         this.start = start;
     }
 }

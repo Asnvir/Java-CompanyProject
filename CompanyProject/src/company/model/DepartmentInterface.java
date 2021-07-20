@@ -5,10 +5,13 @@ import company.util.JobTime;
 
 import java.io.Serializable;
 
-public interface Role extends Serializable {
+public interface DepartmentInterface extends Serializable {
 
     WorkingTime startTime();
 
     WorkingTime endTime();
 
+    boolean isHomeAllowed();
+
+    void addEmployee(Employee employee);
 }
