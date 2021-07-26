@@ -7,26 +7,26 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Department implements DepartmentInterface {
-    private boolean homeAllowed;
-    private WorkingTime time;
+
     private String name;
+    private WorkingTime time;
     private boolean isSynchronous;
     private boolean isFixedTime;
-
+    private boolean homeAllowed;
     private List<Employee> employees;
 
-    public Department(String name, WorkingTime time, boolean sync, boolean fixed, boolean homeAllowed) {
-        this.time = time;
+    public Department(String name, WorkingTime time, boolean isSynchronous, boolean isFixedTime, boolean homeAllowed) {
         this.name = name;
+        this.time = time;
         this.employees = new ArrayList<>();
-        isSynchronous = sync;
-        isFixedTime = fixed;
+        this.isSynchronous = isSynchronous;
+        this.isFixedTime = isFixedTime;
         this.homeAllowed = homeAllowed;
     }
 
     public WorkingTime startTime() {
         return time;
-    }
+    } //TODO можно ли тут написать this.time вместо time
 
     @Override
     public WorkingTime endTime() {
@@ -41,12 +41,12 @@ public class Department implements DepartmentInterface {
     @Override
     public void addEmployee(Employee employee) {
         employees.add(employee);
-        if (isSynchronous) {
-            employee.setFactStartTime(time);
+        if (isSynchronous) { //TODO можно ли тут написать  this.isSynchronous вместо isSynchronous
+            employee.setFactStartTime(time); //TODO можно ли тут написать this.time вместо time
         } else {
             employee.setFactStartTimeAsPreferred();
         }
-        employee.setHome(isHomeAllowed());
+        employee.setHome(isHomeAllowed()); //TODO можно ли эту строку написать внутри else сверху?
     }
 
     public String getName() {

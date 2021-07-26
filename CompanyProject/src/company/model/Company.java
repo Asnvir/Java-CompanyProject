@@ -8,9 +8,7 @@ public class Company implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private List<DepartmentInterface> departments = new ArrayList<>();
-
     private List<Role> roles = new ArrayList<>();
-
     private List<Employee> employees = new ArrayList<>();
 
     public void add(DepartmentInterface department) {

@@ -10,7 +10,7 @@ public class Employee implements Serializable {
     private static final long serialVersionUID = 10L;
 
     public static final int HOURLY_PRICE = 10;
-    public static final int HOME_PERCENT = 10;
+    public static final int EFFECTIVE_HOME_PERCENT = 10;
     public static final int EFFECTIVE_PERCENT = 20;
     public static final int HOURS_PER_DAY = 8;
 
@@ -63,7 +63,7 @@ public class Employee implements Serializable {
     public int performance() {
         if (preference.preferredHome()) {
             if (home) {
-                return (int) (HOURS_PER_DAY * HOURLY_PRICE * (1 + HOME_PERCENT/100.0));
+                return (int) (HOURS_PER_DAY * HOURLY_PRICE * (1 + EFFECTIVE_HOME_PERCENT /100.0)); //TODO тут мы сделали прокент к сумме часов процент? Хотел спросить или не трубется сделать процент к каждому часу?
             }
             else {
                 return HOURS_PER_DAY * HOURLY_PRICE;
