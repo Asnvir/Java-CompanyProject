@@ -1,5 +1,8 @@
 package company.model;
 
+import company.model.employees.Employee;
+import company.model.roles.Role;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,4 +28,15 @@ public class Company implements Serializable {
         //role.addEmployee(employee);
     }
 
+    public void addRole(Role role) {
+        roles.add(role);
+    }
+
+    public List<Role> getRoles() {
+        return roles;
+    }
+
+    public List<Employee> getEmployees() {
+        return employees;
+    }
 }

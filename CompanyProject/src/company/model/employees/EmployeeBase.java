@@ -1,6 +1,6 @@
-package company.model;
+package company.model.employees;
 
-import company.util.EmployeeType;
+import company.model.EmployeeType;
 
 import java.io.Serializable;
 

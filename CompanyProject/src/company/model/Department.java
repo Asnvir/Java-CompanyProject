@@ -1,10 +1,12 @@
 package company.model;
 
-import company.model2.WorkingTime;
-import company.util.JobTime;
+import company.model.employees.Employee;
+import company.model.roles.Role;
 
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 public class Department implements DepartmentInterface {
 
@@ -13,12 +15,14 @@ public class Department implements DepartmentInterface {
     private boolean isSynchronous;
     private boolean isFixedTime;
     private boolean homeAllowed;
-    private List<Employee> employees;
+    private final List<Employee> employees; // создается один раз, можно лишь добавлять и удалять людей из него.
+    private final Set<Role> roles;
 
     public Department(String name, WorkingTime time, boolean isSynchronous, boolean isFixedTime, boolean homeAllowed) {
         this.name = name;
         this.time = time;
         this.employees = new ArrayList<>();
+        this.roles = new LinkedHashSet<>(); // чтобы избежать добавления одинаковых ролей
         this.isSynchronous = isSynchronous;
         this.isFixedTime = isFixedTime;
         this.homeAllowed = homeAllowed;
@@ -26,7 +30,7 @@ public class Department implements DepartmentInterface {
 
     public WorkingTime startTime() {
         return time;
-    } //TODO можно ли тут написать this.time вместо time
+    }
 
     @Override
     public WorkingTime endTime() {
@@ -41,16 +45,24 @@ public class Department implements DepartmentInterface {
     @Override
     public void addEmployee(Employee employee) {
         employees.add(employee);
-        if (isSynchronous) { //TODO можно ли тут написать  this.isSynchronous вместо isSynchronous
-            employee.setFactStartTime(time); //TODO можно ли тут написать this.time вместо time
+        if (isSynchronous) {
+            employee.setFactStartTime(time);
         } else {
             employee.setFactStartTimeAsPreferred();
         }
-        employee.setHome(isHomeAllowed()); //TODO можно ли эту строку написать внутри else сверху?
+        employee.setHome(isHomeAllowed());
     }
 
     public String getName() {
         return name;
+    }
+
+    public List<Employee> getEmployees() {
+        return employees;
+    }
+
+    public List<Role> getRoles() {
+        return new ArrayList<>(roles);
     }
 
     public void setTime(WorkingTime time) {

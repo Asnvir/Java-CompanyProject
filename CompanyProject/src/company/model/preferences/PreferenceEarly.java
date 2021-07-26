@@ -1,4 +1,4 @@
-package company.model;
+package company.model.preferences;
 
 public class PreferenceEarly extends Preference {
 

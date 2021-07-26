@@ -1,4 +1,4 @@
-package company.util;
+package company.model;
 
 import java.io.Serializable;
 import java.util.Objects;

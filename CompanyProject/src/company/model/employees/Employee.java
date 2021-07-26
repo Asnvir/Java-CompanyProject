@@ -1,7 +1,8 @@
-package company.model;
+package company.model.employees;
 
-import company.model2.WorkingTime;
-import company.util.EmployeeType;
+import company.model.preferences.Preference;
+import company.model.WorkingTime;
+import company.model.EmployeeType;
 
 import java.io.Serializable;
 
@@ -63,20 +64,28 @@ public class Employee implements Serializable {
     public int performance() {
         if (preference.preferredHome()) {
             if (home) {
-                return (int) (HOURS_PER_DAY * HOURLY_PRICE * (1 + EFFECTIVE_HOME_PERCENT /100.0)); //TODO тут мы сделали прокент к сумме часов процент? Хотел спросить или не трубется сделать процент к каждому часу?
-            }
-            else {
+                return (int) (HOURS_PER_DAY * HOURLY_PRICE * (1 + EFFECTIVE_HOME_PERCENT /100.0));
+            } else {
                 return HOURS_PER_DAY * HOURLY_PRICE;
             }
         } else {
             int factStart = factTime.getStartTime();
             int prefStart = preferredTime.getStartTime();
-            int earlyWork = factStart < 8 ? 8 - factStart : 0;
-            int lateWork = factStart > 8 ? factStart - 8 : 0;
+
+            int luckyHour = 0;
+            int unluckyHour = 0;
+            int normalHour = 0;
+            // iteration by fact hours
+            for (int i = factStart; i < factStart+9; i++) {
+                if (i >= 8 && i < 17) normalHour++; // normal working time
+                else if (i >= prefStart && i < prefStart + 9) luckyHour++; // preferred time
+                else unluckyHour++; // unpreferred time
+            }
+            normalHour--; // lunch time - если учитывается в рабочее время - удалить
+            return (int) (normalHour * HOURLY_PRICE +
+                          luckyHour * HOURLY_PRICE * (1 + EFFECTIVE_PERCENT/100.0) +
+                          unluckyHour * HOURLY_PRICE * (1 - EFFECTIVE_PERCENT/100.0));
         }
-        // todo Дописать формулу
-//         |-*-|-*-|---|---|---|---|---|---|---|---|---|---|---|---|---|
-//           6   7   8   9   10  11  12  13  14  15  16  17  18  19  20
     }
 
     public void setHome(boolean homeAllowed) {

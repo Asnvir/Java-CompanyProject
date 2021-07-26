@@ -1,7 +1,6 @@
 package company.model;
 
-import company.model2.WorkingTime;
-import company.util.JobTime;
+import company.model.employees.Employee;
 
 import java.io.Serializable;
 

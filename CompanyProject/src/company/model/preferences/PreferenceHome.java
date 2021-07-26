@@ -1,4 +1,4 @@
-package company.model;
+package company.model.preferences;
 
 public class PreferenceHome extends Preference {
     private static final long serialVersionUID = 3L;

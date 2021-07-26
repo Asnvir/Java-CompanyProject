@@ -1,4 +1,4 @@
-package company.model;
+package company.model.preferences;
 
 import java.io.Serializable;
 

@@ -1,9 +1,14 @@
 package company;
 
+import company.controller.Controller;
 import company.model.Department;
-import company.model.Employee;
-import company.model.RoleAbstract;
+import company.model.employees.Employee;
+import company.model.roles.AbstractRole;
+import company.model.roles.Role;
 import javafx.application.Application;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -17,14 +22,17 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
+import java.util.List;
+
 public class Main extends Application {
 
     public static final int HOURS_IN_MONTHS = 160;
+    private Controller controller;
 
     //Department
     private ListView<Department> departmentsListView;
-    private TableView<RoleAbstract> departmentDetailTable;
-    private ListView<? extends RoleAbstract> rolesByDepartmentListView;
+    private TableView<Department> departmentDetailTable;
+    private ListView<? extends AbstractRole> rolesByDepartmentListView;
     private TextField nameOfDepartmentTextField;
     private TextField startTimeOfDepartmentTextField;
     private TextField endTimeOfDepartmentTextField;
@@ -33,9 +41,9 @@ public class Main extends Application {
     private ComboBox departmentCMBoxDepartTab;
     private ComboBox roleCMBoxDepartTab;
     //Role
-    private ListView<RoleAbstract> rolesListView;
-    private TableView<RoleAbstract> detailsOfRoleTable;
-    private ListView<Employee> employeesByRoleListView;
+//    private ListView<AbstractRole> rolesListView;
+    private TableView<Role> detailsOfRoleTable;
+//    private ListView<Employee> employeesByRoleListView;
     private TextField nameOfRoleTextField;
     private TextField startTimeOfRoleTextField;
     private TextField endTimeOfRoleTextField;
@@ -57,7 +65,10 @@ public class Main extends Application {
     }
 
     public void start(Stage primaryStage) throws Exception {
-//Configure the main BoarderPane
+
+        controller = new Controller(this);
+
+//Configure the main BorderPane
         BorderPane rootPane = new BorderPane();
         rootPane.setMinWidth(1150);
         rootPane.setPrefWidth(1150);
@@ -119,21 +130,20 @@ public class Main extends Application {
 
         //departmentsBorderPane
         BorderPane departmentBorderPane = new BorderPane();
-        departmentBorderPane.setMinWidth(1150);
-        departmentBorderPane.setPrefWidth(1150);
-//        departmentBorderPane.setMinHeight(716);
-//        departmentBorderPane.setPrefHeight(716);
+//        departmentBorderPane.setMinWidth(1150);
+//        departmentBorderPane.setPrefWidth(1150);
+////        departmentBorderPane.setMinHeight(720);
+////        departmentBorderPane.setPrefHeight(720);
         Label departmentsDetailedInfoLbl = new Label("Department's detailed information");
         departmentsDetailedInfoLbl.setFont(new Font(18));
-        BorderPane.setAlignment(departmentsDetailedInfoLbl, Pos.CENTER); //TODO departmentsBorderPane.setAlignment или BorderPane.setAlignment тот же самый вопрос и в RolesTab
-
+        BorderPane.setAlignment(departmentsDetailedInfoLbl, Pos.CENTER);
 
         //Start creation of big table of department's details
 
         //departmentsListView  (List Of departments by name)
-        departmentsListView = new ListView<>();
-        departmentsListView.setMinWidth(200);
-        departmentsListView.setPrefWidth(200);
+//        departmentsListView = new ListView<>();
+//        departmentsListView.setMinWidth(200);
+//        departmentsListView.setPrefWidth(200);
 //        departmentsListView.setMinHeight(579);
 //        departmentsListView.setPrefHeight(579);
 
@@ -174,7 +184,7 @@ public class Main extends Application {
         synchronisableDepartmentColumn.setPrefWidth(97);
         synchronisableDepartmentColumn.setCellValueFactory(new PropertyValueFactory<>("прописать свойство"));//TODO прописать где-то в полях объекта department требует ли department синхронизированной работы сотрудников true/false
 
-        //departmentDetailTable.getColumns().addAll(nameOfDepartmentColumn, startTimeOfDepartmentColumn, endTimeOfDepartmentColumn, changeableTimeDepartmentColumn, synchronisableDepartmentColumn);
+        departmentDetailTable.getColumns().addAll(nameOfDepartmentColumn, startTimeOfDepartmentColumn, endTimeOfDepartmentColumn, changeableTimeDepartmentColumn, synchronisableDepartmentColumn);
 
         //rolesByDepartment ListView (List of department's roles)
         rolesByDepartmentListView = new ListView<>();
@@ -231,9 +241,9 @@ public class Main extends Application {
         roleAddingToDepartmentHbox.setAlignment(Pos.CENTER_LEFT);
 
         Label addRoleToDepartmentLabel = new Label("Add a role to department : ");
-        departmentCMBoxDepartTab = new ComboBox();
+        departmentCMBoxDepartTab = new ComboBox<>();
         departmentCMBoxDepartTab.setPromptText("Department");
-        roleCMBoxDepartTab = new ComboBox();
+        roleCMBoxDepartTab = new ComboBox<>();
         roleCMBoxDepartTab.setPromptText("Role");
         Button addRoleToDepartmentBtn = new Button("Add");
         addRoleToDepartmentBtn.setOnAction(new EventHandler<ActionEvent>() {
@@ -249,7 +259,7 @@ public class Main extends Application {
 
         //Construct the departmentsBorderPane
         departmentBorderPane.setTop(departmentsDetailedInfoLbl);
-        departmentBorderPane.setLeft(departmentsListView);
+//        departmentBorderPane.setLeft(departmentsListView);
         departmentBorderPane.setCenter(departmentDetailTable);
         departmentBorderPane.setRight(rolesByDepartmentListView);
         departmentBorderPane.setBottom(bottonRootVboxOfDepartment);
@@ -276,9 +286,9 @@ public class Main extends Application {
         BorderPane.setAlignment(rolesLabel, Pos.CENTER);  //TODO rolesBorderPane.setAlignment или BorderPane.setAlignment
 
         //rolesListView ( List of roles by names)
-        rolesListView = new ListView<>();
-        rolesListView.setMinWidth(200);
-        rolesListView.setPrefWidth(200);
+//        rolesListView = new ListView<>();
+//        rolesListView.setMinWidth(200);
+//        rolesListView.setPrefWidth(200);
 //        rolesListView.setMinHeight(579);
 //        rolesListView.setPrefHeight(579);
 
@@ -292,36 +302,36 @@ public class Main extends Application {
 
 
         //Role's name column
-        TableColumn<RoleAbstract, String> nameOfRoleColumn = new TableColumn<>("Name");
+        TableColumn<Role, String> nameOfRoleColumn = new TableColumn<>("Name");
         nameOfRoleColumn.setMinWidth(420);
         nameOfRoleColumn.setPrefWidth(420);
         nameOfRoleColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
 
         //Role's start time column
-        TableColumn<RoleAbstract, Integer> startTimeOfRoleColumn = new TableColumn<>("Start time");
+        TableColumn<Role, Integer> startTimeOfRoleColumn = new TableColumn<>("Start time");
         startTimeOfRoleColumn.setMinWidth(101);
         startTimeOfRoleColumn.setPrefWidth(101);
         startTimeOfRoleColumn.setCellValueFactory(new PropertyValueFactory<>("start"));
 
         //Role's end time column
-        TableColumn<RoleAbstract, Integer> endTimeOfRoleColumn = new TableColumn<>("End time");
+        TableColumn<Role, Integer> endTimeOfRoleColumn = new TableColumn<>("End time");
         endTimeOfRoleColumn.setMinWidth(119);
         endTimeOfRoleColumn.setPrefWidth(119);
         endTimeOfRoleColumn.setCellValueFactory(new PropertyValueFactory<>("end"));   //TODO продумать где прописать endTime of department
 
 
         //Role's changeable time column
-        TableColumn<RoleAbstract, Boolean> changeableTimeRoleColumn = new TableColumn<>("Changeable time"); //TODO прописать где-то в полях объекта Role или можно менять часы работы true/false
+        TableColumn<Role, Boolean> changeableTimeRoleColumn = new TableColumn<>("Changeable time"); //TODO прописать где-то в полях объекта Role или можно менять часы работы true/false
         changeableTimeRoleColumn.setMinWidth(106);
         changeableTimeRoleColumn.setPrefWidth(106);
-        changeableTimeRoleColumn.setCellValueFactory(new PropertyValueFactory<>("прописать свойство"));
+        changeableTimeRoleColumn.setCellValueFactory(new PropertyValueFactory<>("changeableTime"));
 
         detailsOfRoleTable.getColumns().addAll(nameOfRoleColumn, startTimeOfRoleColumn, endTimeOfRoleColumn, changeableTimeRoleColumn);
 
         //employeesByRole ListView ( Lise of role's employees )
-        employeesByRoleListView = new ListView<>();
-        employeesByRoleListView.setMinWidth(200);
-        employeesByRoleListView.prefWidth(200);
+//        employeesByRoleListView = new ListView<>();
+//        employeesByRoleListView.setMinWidth(200);
+//        employeesByRoleListView.prefWidth(200);
 
         //end creation of big table of department's details
 
@@ -349,12 +359,24 @@ public class Main extends Application {
         startTimeOfRoleTextField.setPromptText("Start time");
         endTimeOfRoleTextField = new TextField();
         endTimeOfRoleTextField.setPromptText("End time");
+        endTimeOfRoleTextField.setEditable(false);
+        startTimeOfRoleTextField.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                try {
+                    int v = Integer.parseInt(newValue) + 9;
+                    endTimeOfRoleTextField.setText(String.valueOf(v));
+                } catch (NumberFormatException ignored) {}
+            }
+        });
         changeableTimeOfRoleChckBox = new CheckBox("Time could be changeable?");
         Button createRoleBtn = new Button("Create");
         createRoleBtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-
+                List<Role> roles = controller.createRole(nameOfRoleTextField, startTimeOfRoleTextField, changeableTimeOfRoleChckBox);
+                detailsOfRoleTable.setItems(FXCollections.observableList(roles));
+                roleCMBoxDepartTab.setItems(FXCollections.observableList(roles));
             }
         });
 
@@ -389,9 +411,9 @@ public class Main extends Application {
 
         //Construct the rolesBorderPane
         roleBorderPane.setTop(rolesLabel);
-        roleBorderPane.setLeft(rolesListView);
+//        roleBorderPane.setLeft(rolesListView);
         roleBorderPane.setCenter(detailsOfRoleTable);
-        roleBorderPane.setRight(employeesByRoleListView);
+//        roleBorderPane.setRight(employeesByRoleListView);
         roleBorderPane.setBottom(bottonRootVboxOfRole);
 
         //Construct the roleTab

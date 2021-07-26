@@ -1,4 +1,4 @@
-package company.model2;
+package company.model;
 
 public class WorkingTime {
     static final long serialVersionUID = 201L;
