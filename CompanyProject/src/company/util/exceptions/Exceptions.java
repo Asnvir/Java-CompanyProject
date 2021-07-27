@@ -1,4 +1,4 @@
-package company.model.exceptions;
+package company.util.exceptions;
 
 public class Exceptions {
 //    TODO придумать exceptions: RoleAlreadyExistsException - мы это решили с помощью set верно?

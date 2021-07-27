@@ -1,6 +1,7 @@
 package company.model.roles;
 
 import company.model.WorkingTime;
+import company.util.CompanyUtil;
 
 import java.io.Serializable;
 
@@ -16,8 +17,8 @@ public interface Role extends Serializable {
         return startTime().getStartTime();
     }
 
-    default Integer getEnd() {
-        return startTime().getStartTime() + 9;
+    default String getEnd() {
+        return CompanyUtil.convertTime(startTime().getStartTime() + 9);
     }
 
     boolean isChangeableTime();

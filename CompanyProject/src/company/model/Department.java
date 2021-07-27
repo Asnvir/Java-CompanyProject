@@ -2,6 +2,7 @@ package company.model;
 
 import company.model.employees.Employee;
 import company.model.roles.Role;
+import company.util.CompanyUtil;
 
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
@@ -35,6 +36,14 @@ public class Department implements DepartmentInterface {
     @Override
     public WorkingTime endTime() {
         return new WorkingTime(startTime().getStartTime() + 9);
+    }
+
+    public int getStart() {
+        return time.getStartTime();
+    }
+
+    public String getEnd() {
+        return CompanyUtil.convertTime(time.getStartTime()+9);
     }
 
     @Override
@@ -77,7 +86,19 @@ public class Department implements DepartmentInterface {
         }
     }
 
-//    TODO if (deaprtament isFixedTime) {
+    public boolean isSynchronous() {
+        return isSynchronous;
+    }
+
+    public boolean isFixedTime() {
+        return isFixedTime;
+    }
+
+    public void addRole(Role role) {
+        roles.add(role);
+    }
+
+    //    TODO if (deaprtament isFixedTime) {
 //
 
 }

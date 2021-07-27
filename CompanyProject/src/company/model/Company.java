@@ -10,15 +10,15 @@ import java.util.List;
 public class Company implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    private List<DepartmentInterface> departments = new ArrayList<>();
+    private List<Department> departments = new ArrayList<>();
     private List<Role> roles = new ArrayList<>();
     private List<Employee> employees = new ArrayList<>();
 
-    public void add(DepartmentInterface department) {
+    public void add(Department department) {
         departments.add(department);
     }
 
-    public List<DepartmentInterface> getDepartments() {
+    public List<Department> getDepartments() {
         return departments;
     }
 

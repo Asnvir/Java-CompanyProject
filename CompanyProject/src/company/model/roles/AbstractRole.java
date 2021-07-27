@@ -32,7 +32,7 @@ public abstract class AbstractRole implements Serializable, Role {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (!(o instanceof AbstractRole)) return false;
         AbstractRole that = (AbstractRole) o;
         return Objects.equals(name, that.name) && Objects.equals(start, that.start);
     }
@@ -41,6 +41,4 @@ public abstract class AbstractRole implements Serializable, Role {
     public int hashCode() {
         return Objects.hash(name, start);
     }
-
-
 }

@@ -5,6 +5,9 @@ import company.model.Department;
 import company.model.employees.Employee;
 import company.model.roles.AbstractRole;
 import company.model.roles.Role;
+import company.util.CompanyUtil;
+import company.util.exceptions.IllegalNameException;
+import company.util.exceptions.IllegalTimeException;
 import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -32,14 +35,14 @@ public class Main extends Application {
     //Department
     private ListView<Department> departmentsListView;
     private TableView<Department> departmentDetailTable;
-    private ListView<? extends AbstractRole> rolesByDepartmentListView;
+    private ListView<Role> rolesByDepartmentListView;
     private TextField nameOfDepartmentTextField;
     private TextField startTimeOfDepartmentTextField;
     private TextField endTimeOfDepartmentTextField;
-    private CheckBox changeableTimeOfDepartmentChckBox;
+    private CheckBox fixedTimeOfDepartmentChckBox;
     private CheckBox synchronisableDepartmentChckBox;
-//    private ComboBox departmentCMBoxDepartTab;
-    private ComboBox roleCMBoxDepartTab;
+    private CheckBox homeAllowedChckBox;
+    private ComboBox<Role> roleCMBoxDepartTab;
     //Role
 //    private ListView<AbstractRole> rolesListView;
     private TableView<Role> detailsOfRoleTable;
@@ -48,15 +51,15 @@ public class Main extends Application {
     private TextField startTimeOfRoleTextField;
     private TextField endTimeOfRoleTextField;
     private CheckBox changeableTimeOfRoleChckBox;
-    private ComboBox roleCMBoxRoleTab;
-    private ComboBox employeeCMBoxRoleTab;
+//    private ComboBox roleCMBoxRoleTab;
+//    private ComboBox employeeCMBoxRoleTab;
     //Employee
-    private  ListView<Employee> employeeListView;
+    private ListView<Department> departmentListView;
     private TableView<Employee> employeeDetailTable;
     private TextField nameOfEmployeeTextField;
-    private ComboBox preferenceOfEmployeeCMbox;
-    private ComboBox typeOfSalaryCMbox;
-    private ComboBox roleOfEmployeeCMbox;
+    private ComboBox<String> preferenceOfEmployeeCMbox;
+    private ComboBox<String> typeOfSalaryCMbox;
+    private ComboBox<Role> roleOfEmployeeCMbox;
     private TextField startTimeOfEmployeeTextField;
     private TextField endTimeOfEmployeeTextField;
 
@@ -138,16 +141,6 @@ public class Main extends Application {
         departmentsDetailedInfoLbl.setFont(new Font(18));
         BorderPane.setAlignment(departmentsDetailedInfoLbl, Pos.CENTER);
 
-        //Start creation of big table of department's details
-
-        //departmentsListView  (List Of departments by name)
-//        departmentsListView = new ListView<>();
-//        departmentsListView.setMinWidth(200);
-//        departmentsListView.setPrefWidth(200);
-//        departmentsListView.setMinHeight(579);
-//        departmentsListView.setPrefHeight(579);
-
-
         //departmentsDetailTable TableView (Table of department's details)
         departmentDetailTable = new TableView<>();
 //        departmentDetailTable.setMinWidth(750);
@@ -156,8 +149,8 @@ public class Main extends Application {
 
         //Department's name Column
         TableColumn<Department, String> nameOfDepartmentColumn = new TableColumn<>("Name");
-//        nameOfDepartmentColumn.setMinWidth(231);
-//        nameOfDepartmentColumn.setPrefWidth(231);
+//        nameOfDepartmentColumn.setMinWidth(230);
+//        nameOfDepartmentColumn.setPrefWidth(230);
         nameOfDepartmentColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
 
         //Department's start time column
@@ -167,29 +160,40 @@ public class Main extends Application {
         startTimeOfDepartmentColumn.setCellValueFactory(new PropertyValueFactory<>("start"));
 
         //Department's end time column
-        TableColumn<Department, Integer> endTimeOfDepartmentColumn = new TableColumn<>("End time");
+        TableColumn<Department, String> endTimeOfDepartmentColumn = new TableColumn<>("End time");
 //        endTimeOfDepartmentColumn.setMinWidth(120);
 //        endTimeOfDepartmentColumn.setPrefWidth(120);
-        endTimeOfDepartmentColumn.setCellValueFactory(new PropertyValueFactory<>("end"));   //TODO продумать где прописать endTime of department
+        endTimeOfDepartmentColumn.setCellValueFactory(new PropertyValueFactory<>("end"));
 
         //Department's changeable time column
-        TableColumn<Department, Boolean> changeableTimeDepartmentColumn = new TableColumn<>("Changeable time"); //TODO прописать где-то в полях объекта department или можно менять часы работы true/false
-//        changeableTimeDepartmentColumn.setMinWidth(121);
-//        changeableTimeDepartmentColumn.setPrefWidth(121);
-        changeableTimeDepartmentColumn.setCellValueFactory(new PropertyValueFactory<>("прописать свойство"));
+        TableColumn<Department, Boolean> changeableTimeDepartmentColumn = new TableColumn<>("Fixed time");
+//        changeableTimeDepartmentColumn.setMinWidth(120);
+//        changeableTimeDepartmentColumn.setPrefWidth(120);
+        changeableTimeDepartmentColumn.setCellValueFactory(new PropertyValueFactory<>("fixedTime"));
 
         //Department's synchronisable column
-        TableColumn<Department, Boolean> synchronisableDepartmentColumn = new TableColumn<>("Synchronisable");
-//        synchronisableDepartmentColumn.setMinWidth(97);
-//        synchronisableDepartmentColumn.setPrefWidth(97);
-        synchronisableDepartmentColumn.setCellValueFactory(new PropertyValueFactory<>("прописать свойство"));//TODO прописать где-то в полях объекта department требует ли department синхронизированной работы сотрудников true/false
+        TableColumn<Department, Boolean> synchronisableDepartmentColumn = new TableColumn<>("Synchronised");
+//        synchronisableDepartmentColumn.setMinWidth(100);
+//        synchronisableDepartmentColumn.setPrefWidth(100);
+        synchronisableDepartmentColumn.setCellValueFactory(new PropertyValueFactory<>("synchronous"));
 
-        departmentDetailTable.getColumns().addAll(nameOfDepartmentColumn, startTimeOfDepartmentColumn, endTimeOfDepartmentColumn, changeableTimeDepartmentColumn, synchronisableDepartmentColumn);
+        TableColumn<Department, Boolean> homeAllowedDepartmentColumn = new TableColumn<>("Home allowed");
+        homeAllowedDepartmentColumn.setCellValueFactory(new PropertyValueFactory<>("homeAllowed"));
+
+        departmentDetailTable.getColumns().addAll(nameOfDepartmentColumn, startTimeOfDepartmentColumn, endTimeOfDepartmentColumn, changeableTimeDepartmentColumn, synchronisableDepartmentColumn, homeAllowedDepartmentColumn);
 
         //rolesByDepartment ListView (List of department's roles)
         rolesByDepartmentListView = new ListView<>();
 //        rolesByDepartmentListView.setMinWidth(200);
 //        rolesByDepartmentListView.setPrefWidth(200);
+        departmentDetailTable.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Department>() {
+            @Override
+            public void changed(ObservableValue<? extends Department> observable, Department oldValue, Department newValue) {
+                if (newValue!=null) {
+                    rolesByDepartmentListView.setItems(FXCollections.observableList(newValue.getRoles()));
+                }
+            }
+        });
 
         //end creation of big table of department's details
 
@@ -211,24 +215,49 @@ public class Main extends Application {
         departmentCreationHBox.setPadding(new Insets(5));
         departmentCreationHBox.setAlignment(Pos.CENTER_LEFT);
 
-        Label newDepartmentLabel = new Label("New department : ");
+        Label newDepartmentLabel = new Label("New department :");
         nameOfDepartmentTextField = new TextField();
         nameOfDepartmentTextField.setPromptText("Name");
         startTimeOfDepartmentTextField = new TextField();
         startTimeOfDepartmentTextField.setPromptText("Start time");
         endTimeOfDepartmentTextField = new TextField();
         endTimeOfDepartmentTextField.setPromptText("End time");
-        changeableTimeOfDepartmentChckBox = new CheckBox("Time could be changeable?");
-        synchronisableDepartmentChckBox = new CheckBox("Department should be synchronisable");
+        endTimeOfDepartmentTextField.setEditable(false);
+        startTimeOfDepartmentTextField.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                try {
+                    int v = Integer.parseInt(newValue) + 9;
+                    endTimeOfDepartmentTextField.setText(CompanyUtil.convertTime(v));
+                } catch (NumberFormatException ignored) {}
+            }
+        });
+        fixedTimeOfDepartmentChckBox = new CheckBox("Fixed time?");
+        synchronisableDepartmentChckBox = new CheckBox("Synchronised?");
+        homeAllowedChckBox = new CheckBox("Allowed home?");
         Button createDepartmentBtn = new Button("Create");
         createDepartmentBtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
+                    try {
+                        List<Department> departments = controller.createDepartment(nameOfDepartmentTextField, startTimeOfDepartmentTextField, fixedTimeOfDepartmentChckBox, synchronisableDepartmentChckBox, homeAllowedChckBox);
+                        departmentDetailTable.setItems(FXCollections.observableList(departments));
 
+                    } catch (NumberFormatException e) {
+                        Alert alert = new Alert(Alert.AlertType.ERROR, "Incorrect start/end time");
+                        alert.setTitle("Error");
+                        alert.setHeaderText(null);
+                        alert.show();
+                    } catch (IllegalNameException | IllegalTimeException e) {
+                        Alert alert = new Alert(Alert.AlertType.ERROR, e.getMessage());
+                        alert.setTitle("Error");
+                        alert.setHeaderText(null);
+                        alert.show();
+                    }
             }
         });
 
-        departmentCreationHBox.getChildren().addAll(newDepartmentLabel, nameOfDepartmentTextField, startTimeOfDepartmentTextField, endTimeOfDepartmentTextField, changeableTimeOfDepartmentChckBox, synchronisableDepartmentChckBox, createDepartmentBtn);
+        departmentCreationHBox.getChildren().addAll(newDepartmentLabel, nameOfDepartmentTextField, startTimeOfDepartmentTextField, endTimeOfDepartmentTextField, fixedTimeOfDepartmentChckBox, synchronisableDepartmentChckBox, homeAllowedChckBox, createDepartmentBtn);
 
         //Hbox of adding a role to department
         HBox roleAddingToDepartmentHbox = new HBox();
@@ -249,7 +278,12 @@ public class Main extends Application {
         addRoleToDepartmentBtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-
+                Department department = departmentDetailTable.getSelectionModel().getSelectedItem();
+                if (department == null) return;
+                Role role = roleCMBoxDepartTab.getValue();
+                if (role == null) return;
+                department.addRole(role);
+                rolesByDepartmentListView.setItems(FXCollections.observableList(department.getRoles()));
             }
         });
         roleAddingToDepartmentHbox.getChildren().addAll(addRoleToDepartmentLabel, roleCMBoxDepartTab, addRoleToDepartmentBtn);
@@ -314,7 +348,7 @@ public class Main extends Application {
         startTimeOfRoleColumn.setCellValueFactory(new PropertyValueFactory<>("start"));
 
         //Role's end time column
-        TableColumn<Role, Integer> endTimeOfRoleColumn = new TableColumn<>("End time");
+        TableColumn<Role, String> endTimeOfRoleColumn = new TableColumn<>("End time");
 //        endTimeOfRoleColumn.setMinWidth(119);
 //        endTimeOfRoleColumn.setPrefWidth(119);
         endTimeOfRoleColumn.setCellValueFactory(new PropertyValueFactory<>("end"));   //TODO продумать где прописать endTime of department
@@ -365,7 +399,7 @@ public class Main extends Application {
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
                 try {
                     int v = Integer.parseInt(newValue) + 9;
-                    endTimeOfRoleTextField.setText(String.valueOf(v));
+                    endTimeOfRoleTextField.setText(CompanyUtil.convertTime(v));
                 } catch (NumberFormatException ignored) {}
             }
         });
@@ -374,9 +408,22 @@ public class Main extends Application {
         createRoleBtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                List<Role> roles = controller.createRole(nameOfRoleTextField, startTimeOfRoleTextField, changeableTimeOfRoleChckBox);
-                detailsOfRoleTable.setItems(FXCollections.observableList(roles));
-                roleCMBoxDepartTab.setItems(FXCollections.observableList(roles));
+                try {
+                    List<Role> roles = controller.createRole(nameOfRoleTextField, startTimeOfRoleTextField, changeableTimeOfRoleChckBox);
+                    detailsOfRoleTable.setItems(FXCollections.observableList(roles));
+                    roleCMBoxDepartTab.setItems(FXCollections.observableList(roles));
+                    roleOfEmployeeCMbox.setItems(FXCollections.observableList(roles));
+                } catch (NumberFormatException e) {
+                    Alert alert = new Alert(Alert.AlertType.ERROR, "Incorrect start/end time");
+                    alert.setTitle("Error");
+                    alert.setHeaderText(null);
+                    alert.show();
+                } catch (IllegalNameException | IllegalTimeException e) {
+                    Alert alert = new Alert(Alert.AlertType.ERROR, e.getMessage());
+                    alert.setTitle("Error");
+                    alert.setHeaderText(null);
+                    alert.show();
+                }
             }
         });
 
@@ -438,8 +485,8 @@ public class Main extends Application {
 
         //Start creation of big table of employee's details
 
-        //employeeListView (List of employees by name)
-        employeeListView = new ListView<>();
+        //employeeListView (List of departments by name)
+        departmentListView = new ListView<>();
 //        employeeListView.setMinWidth(200);
 //        employeeListView.setPrefWidth(200);
 //        employeeListView.setMinHeight(634);
@@ -503,12 +550,14 @@ public class Main extends Application {
         Label newEmployeeLabel = new Label("New employee : ");
         nameOfEmployeeTextField = new TextField();
         nameOfEmployeeTextField.setPromptText("Name");
-        preferenceOfEmployeeCMbox = new ComboBox();
+        preferenceOfEmployeeCMbox = new ComboBox<>();
+        preferenceOfEmployeeCMbox.setItems(FXCollections.observableArrayList("No changes", "Early", "Late", "Home"));
         preferenceOfEmployeeCMbox.setPromptText("Preference");
-        typeOfSalaryCMbox = new ComboBox();
+        typeOfSalaryCMbox = new ComboBox<>();
         typeOfSalaryCMbox.setPromptText("Type of salary");
+        typeOfSalaryCMbox.setItems(FXCollections.observableArrayList("Base salary", "Base plus %", "Hourly"));
         startTimeOfEmployeeTextField = new TextField();
-        roleOfEmployeeCMbox = new ComboBox();
+        roleOfEmployeeCMbox = new ComboBox<>();
         roleOfEmployeeCMbox.setPromptText("Role");
         startTimeOfEmployeeTextField.setPromptText("Start time");
         endTimeOfEmployeeTextField = new TextField();
@@ -525,7 +574,7 @@ public class Main extends Application {
 
         //Construct the employeeBorderPane
         employeeBorderPane.setTop(employeeLabel);
-        employeeBorderPane.setLeft(employeeListView);
+        employeeBorderPane.setLeft(departmentListView);
         employeeBorderPane.setCenter(employeeDetailTable);
         employeeBorderPane.setBottom(employeeCreationHBox);
 
