@@ -77,5 +77,7 @@ public class Department implements DepartmentInterface {
         }
     }
 
+//    TODO if (deaprtament isFixedTime) {
+//
 
 }

@@ -14,7 +14,7 @@ public class Employee implements Serializable {
     public static final int EFFECTIVE_HOME_PERCENT = 10;
     public static final int EFFECTIVE_PERCENT = 20;
     public static final int HOURS_PER_DAY = 8;
-
+//TODO может прописать для каждого рабочего номер рабочего , чтобы не было путаницы с рабочими, а его реализовать или с помощью статика, с каждым рабочем номер будет увеличивать на один или рандомно выдавать
     private String name;
     private Preference preference;
     private EmployeeType type;

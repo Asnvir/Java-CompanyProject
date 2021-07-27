@@ -38,7 +38,7 @@ public class Main extends Application {
     private TextField endTimeOfDepartmentTextField;
     private CheckBox changeableTimeOfDepartmentChckBox;
     private CheckBox synchronisableDepartmentChckBox;
-    private ComboBox departmentCMBoxDepartTab;
+//    private ComboBox departmentCMBoxDepartTab;
     private ComboBox roleCMBoxDepartTab;
     //Role
 //    private ListView<AbstractRole> rolesListView;
@@ -70,10 +70,10 @@ public class Main extends Application {
 
 //Configure the main BorderPane
         BorderPane rootPane = new BorderPane();
-        rootPane.setMinWidth(1150);
-        rootPane.setPrefWidth(1150);
-        rootPane.setMinHeight(800);
-        rootPane.setPrefHeight(800);
+//        rootPane.setMinWidth(1150);
+//        rootPane.setPrefWidth(1150);
+//        rootPane.setMinHeight(800);
+//        rootPane.setPrefHeight(800);
 
         VBox topRootVbox = new VBox();
 
@@ -150,63 +150,63 @@ public class Main extends Application {
 
         //departmentsDetailTable TableView (Table of department's details)
         departmentDetailTable = new TableView<>();
-        departmentDetailTable.setMinWidth(750);
-        departmentDetailTable.setPrefWidth(750);
+//        departmentDetailTable.setMinWidth(750);
+//        departmentDetailTable.setPrefWidth(750);
 
 
         //Department's name Column
         TableColumn<Department, String> nameOfDepartmentColumn = new TableColumn<>("Name");
-        nameOfDepartmentColumn.setMinWidth(231);
-        nameOfDepartmentColumn.setPrefWidth(231);
+//        nameOfDepartmentColumn.setMinWidth(231);
+//        nameOfDepartmentColumn.setPrefWidth(231);
         nameOfDepartmentColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
 
         //Department's start time column
         TableColumn<Department, Integer> startTimeOfDepartmentColumn = new TableColumn<>("Start time");
-        startTimeOfDepartmentColumn.setMinWidth(125);
-        startTimeOfDepartmentColumn.setPrefWidth(125);
+//        startTimeOfDepartmentColumn.setMinWidth(125);
+//        startTimeOfDepartmentColumn.setPrefWidth(125);
         startTimeOfDepartmentColumn.setCellValueFactory(new PropertyValueFactory<>("start"));
 
         //Department's end time column
         TableColumn<Department, Integer> endTimeOfDepartmentColumn = new TableColumn<>("End time");
-        endTimeOfDepartmentColumn.setMinWidth(120);
-        endTimeOfDepartmentColumn.setPrefWidth(120);
+//        endTimeOfDepartmentColumn.setMinWidth(120);
+//        endTimeOfDepartmentColumn.setPrefWidth(120);
         endTimeOfDepartmentColumn.setCellValueFactory(new PropertyValueFactory<>("end"));   //TODO продумать где прописать endTime of department
 
         //Department's changeable time column
         TableColumn<Department, Boolean> changeableTimeDepartmentColumn = new TableColumn<>("Changeable time"); //TODO прописать где-то в полях объекта department или можно менять часы работы true/false
-        changeableTimeDepartmentColumn.setMinWidth(121);
-        changeableTimeDepartmentColumn.setPrefWidth(121);
+//        changeableTimeDepartmentColumn.setMinWidth(121);
+//        changeableTimeDepartmentColumn.setPrefWidth(121);
         changeableTimeDepartmentColumn.setCellValueFactory(new PropertyValueFactory<>("прописать свойство"));
 
         //Department's synchronisable column
         TableColumn<Department, Boolean> synchronisableDepartmentColumn = new TableColumn<>("Synchronisable");
-        synchronisableDepartmentColumn.setMinWidth(97);
-        synchronisableDepartmentColumn.setPrefWidth(97);
+//        synchronisableDepartmentColumn.setMinWidth(97);
+//        synchronisableDepartmentColumn.setPrefWidth(97);
         synchronisableDepartmentColumn.setCellValueFactory(new PropertyValueFactory<>("прописать свойство"));//TODO прописать где-то в полях объекта department требует ли department синхронизированной работы сотрудников true/false
 
         departmentDetailTable.getColumns().addAll(nameOfDepartmentColumn, startTimeOfDepartmentColumn, endTimeOfDepartmentColumn, changeableTimeDepartmentColumn, synchronisableDepartmentColumn);
 
         //rolesByDepartment ListView (List of department's roles)
         rolesByDepartmentListView = new ListView<>();
-        rolesByDepartmentListView.setMinWidth(200);
-        rolesByDepartmentListView.setPrefWidth(200);
+//        rolesByDepartmentListView.setMinWidth(200);
+//        rolesByDepartmentListView.setPrefWidth(200);
 
         //end creation of big table of department's details
 
         //VBox bottonRootVboxOfDepartment that consists 2 hboxes - 1 for department creation - 2nd for adding a role to department
         VBox bottonRootVboxOfDepartment = new VBox();
-        bottonRootVboxOfDepartment.setMinWidth(1150);
-        bottonRootVboxOfDepartment.setPrefWidth(1150);
-//        bottonRootVboxOfDepartment.setMinHeight(110);
-//        bottonRootVboxOfDepartment.setPrefHeight(110);
+//        bottonRootVboxOfDepartment.setMinWidth(1150);
+//        bottonRootVboxOfDepartment.setPrefWidth(1150);
+////        bottonRootVboxOfDepartment.setMinHeight(110);
+////        bottonRootVboxOfDepartment.setPrefHeight(110);
         bottonRootVboxOfDepartment.setPadding(new Insets(10));
 
         //HBox of department's creation
         HBox departmentCreationHBox = new HBox();
-        departmentCreationHBox.setMinWidth(1140);
-        departmentCreationHBox.setPrefWidth(1140);
-//        departmentCreationHBox.setMinHeight(45);
-//        departmentCreationHBox.setPrefHeight(45);
+//        departmentCreationHBox.setMinWidth(1140);
+//        departmentCreationHBox.setPrefWidth(1140);
+////        departmentCreationHBox.setMinHeight(45);
+////        departmentCreationHBox.setPrefHeight(45);
         departmentCreationHBox.setSpacing(10.0);
         departmentCreationHBox.setPadding(new Insets(5));
         departmentCreationHBox.setAlignment(Pos.CENTER_LEFT);
@@ -232,17 +232,17 @@ public class Main extends Application {
 
         //Hbox of adding a role to department
         HBox roleAddingToDepartmentHbox = new HBox();
-        roleAddingToDepartmentHbox.setMinWidth(1140);
-        roleAddingToDepartmentHbox.setPrefWidth(1140);
-//        addingRoleToDepartmentHbox.setMinHeight(45);
-//        addingRoleToDepartmentHbox.setPrefHeight(45);
+//        roleAddingToDepartmentHbox.setMinWidth(1140);
+//        roleAddingToDepartmentHbox.setPrefWidth(1140);
+////        addingRoleToDepartmentHbox.setMinHeight(45);
+////        addingRoleToDepartmentHbox.setPrefHeight(45);
         roleAddingToDepartmentHbox.setSpacing(10.0);
         roleAddingToDepartmentHbox.setPadding(new Insets(5));
         roleAddingToDepartmentHbox.setAlignment(Pos.CENTER_LEFT);
 
         Label addRoleToDepartmentLabel = new Label("Add a role to department : ");
-        departmentCMBoxDepartTab = new ComboBox<>();
-        departmentCMBoxDepartTab.setPromptText("Department");
+//        departmentCMBoxDepartTab = new ComboBox<>();
+//        departmentCMBoxDepartTab.setPromptText("Department");
         roleCMBoxDepartTab = new ComboBox<>();
         roleCMBoxDepartTab.setPromptText("Role");
         Button addRoleToDepartmentBtn = new Button("Add");
@@ -252,7 +252,7 @@ public class Main extends Application {
 
             }
         });
-        roleAddingToDepartmentHbox.getChildren().addAll(addRoleToDepartmentLabel, departmentCMBoxDepartTab, roleCMBoxDepartTab, addRoleToDepartmentBtn);
+        roleAddingToDepartmentHbox.getChildren().addAll(addRoleToDepartmentLabel, roleCMBoxDepartTab, addRoleToDepartmentBtn);
 
         bottonRootVboxOfDepartment.getChildren().addAll(departmentCreationHBox, roleAddingToDepartmentHbox);
 
@@ -277,8 +277,8 @@ public class Main extends Application {
 
         //rolesBorderPane
         BorderPane roleBorderPane = new BorderPane();
-        roleBorderPane.setMinWidth(1150);
-        roleBorderPane.setPrefWidth(1150);
+//        roleBorderPane.setMinWidth(1150);
+//        roleBorderPane.setPrefWidth(1150);
 //       rolesBorderPane.setMinHeight(716);
 //       rolesBorderPane.setPrefHeight(716);
         Label rolesLabel = new Label("Role's detailed information");
@@ -295,35 +295,35 @@ public class Main extends Application {
         //Start creation of big table of role's details
         //detailsOfRole TableView (Table of roles' details)
         detailsOfRoleTable = new TableView<>();
-        detailsOfRoleTable.setMinWidth(750);
-        detailsOfRoleTable.setPrefWidth(750);
+//        detailsOfRoleTable.setMinWidth(750);
+//        detailsOfRoleTable.setPrefWidth(750);
 //        detailsOfRoleTable.setMinHeight(579);
 //        detailsOfRoleTable.setPrefHeight(579);
 
 
         //Role's name column
         TableColumn<Role, String> nameOfRoleColumn = new TableColumn<>("Name");
-        nameOfRoleColumn.setMinWidth(420);
-        nameOfRoleColumn.setPrefWidth(420);
+//        nameOfRoleColumn.setMinWidth(420);
+//        nameOfRoleColumn.setPrefWidth(420);
         nameOfRoleColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
 
         //Role's start time column
         TableColumn<Role, Integer> startTimeOfRoleColumn = new TableColumn<>("Start time");
-        startTimeOfRoleColumn.setMinWidth(101);
-        startTimeOfRoleColumn.setPrefWidth(101);
+//        startTimeOfRoleColumn.setMinWidth(101);
+//        startTimeOfRoleColumn.setPrefWidth(101);
         startTimeOfRoleColumn.setCellValueFactory(new PropertyValueFactory<>("start"));
 
         //Role's end time column
         TableColumn<Role, Integer> endTimeOfRoleColumn = new TableColumn<>("End time");
-        endTimeOfRoleColumn.setMinWidth(119);
-        endTimeOfRoleColumn.setPrefWidth(119);
+//        endTimeOfRoleColumn.setMinWidth(119);
+//        endTimeOfRoleColumn.setPrefWidth(119);
         endTimeOfRoleColumn.setCellValueFactory(new PropertyValueFactory<>("end"));   //TODO продумать где прописать endTime of department
 
 
         //Role's changeable time column
         TableColumn<Role, Boolean> changeableTimeRoleColumn = new TableColumn<>("Changeable time"); //TODO прописать где-то в полях объекта Role или можно менять часы работы true/false
-        changeableTimeRoleColumn.setMinWidth(106);
-        changeableTimeRoleColumn.setPrefWidth(106);
+//        changeableTimeRoleColumn.setMinWidth(106);
+//        changeableTimeRoleColumn.setPrefWidth(106);
         changeableTimeRoleColumn.setCellValueFactory(new PropertyValueFactory<>("changeableTime"));
 
         detailsOfRoleTable.getColumns().addAll(nameOfRoleColumn, startTimeOfRoleColumn, endTimeOfRoleColumn, changeableTimeRoleColumn);
@@ -335,17 +335,17 @@ public class Main extends Application {
 
         //end creation of big table of department's details
 
-        //VBox bottonRootVboxOfRole that consists 2 HBoxe 1 - for role creation  2nd for adding an employee to Role
-        VBox bottonRootVboxOfRole = new VBox();
-        bottonRootVboxOfRole.setMinWidth(1150);
-        bottonRootVboxOfRole.setPrefWidth(1150);
-//        bottonRootVboxOfRole.setMinHeight(110);
-//        bottonRootVboxOfRole.setPrefHeight(110);
+        //VBox bottomRootVboxOfRole that consists 2 HBoxe 1 - for role creation  2nd for adding an employee to Role
+        VBox bottomRootVboxOfRole = new VBox();
+//        bottomRootVboxOfRole.setMinWidth(1150);
+//        bottomRootVboxOfRole.setPrefWidth(1150);
+//        bottomRootVboxOfRole.setMinHeight(110);
+//        bottomRootVboxOfRole.setPrefHeight(110);
 
         //HBOX of role's creation
         HBox roleCreationHBox = new HBox();
-        roleCreationHBox.setMinWidth(1140);
-        roleCreationHBox.setPrefWidth(1140);
+//        roleCreationHBox.setMinWidth(1140);
+//        roleCreationHBox.setPrefWidth(1140);
 //        roleCreationHBox.setMinHeight(45);
 //        roleCreationHBox.setPrefHeight(45);
         roleCreationHBox.setSpacing(10.0);
@@ -382,31 +382,31 @@ public class Main extends Application {
 
         roleCreationHBox.getChildren().addAll(newRoleLabel, nameOfRoleTextField, startTimeOfRoleTextField, endTimeOfRoleTextField, changeableTimeOfRoleChckBox, createRoleBtn);
 
-        //HBox adding an employee to Role
-        HBox employeeAddingToRoleHbox = new HBox();
-        employeeAddingToRoleHbox.setMinWidth(1140);
-        employeeAddingToRoleHbox.setPrefWidth(1140);
-//        employeeAddingToRoleHbox.setMinHeight(45);
-//        employeeAddingToRoleHbox.setPrefHeight(45);
-        employeeAddingToRoleHbox.setSpacing(10.0);
-        employeeAddingToRoleHbox.setPadding(new Insets(5));
-        roleAddingToDepartmentHbox.setAlignment(Pos.CENTER_LEFT);
+//        //HBox adding an employee to Role
+//        HBox employeeAddingToRoleHbox = new HBox();
+//        employeeAddingToRoleHbox.setMinWidth(1140);
+//        employeeAddingToRoleHbox.setPrefWidth(1140);
+////        employeeAddingToRoleHbox.setMinHeight(45);
+////        employeeAddingToRoleHbox.setPrefHeight(45);
+//        employeeAddingToRoleHbox.setSpacing(10.0);
+//        employeeAddingToRoleHbox.setPadding(new Insets(5));
+//        roleAddingToDepartmentHbox.setAlignment(Pos.CENTER_LEFT);
+//
+//        Label addEmployeeToRoleLabel = new Label("Add an employee to role : ");
+//        roleCMBoxRoleTab = new ComboBox();
+//        roleCMBoxRoleTab.setPromptText("Role");
+//        employeeCMBoxRoleTab = new ComboBox();
+//        employeeCMBoxRoleTab.setPromptText("Employee");
+//        Button addEmployeeToRoleBtn = new Button("Add");
+//        addEmployeeToRoleBtn.setOnAction(new EventHandler<ActionEvent>() {
+//            @Override
+//            public void handle(ActionEvent event) {
+//
+//            }
+//        });
+//        employeeAddingToRoleHbox.getChildren().addAll(addEmployeeToRoleLabel, roleCMBoxRoleTab, employeeCMBoxRoleTab, addEmployeeToRoleBtn);
 
-        Label addEmployeeToRoleLabel = new Label("Add an employee to role : ");
-        roleCMBoxRoleTab = new ComboBox();
-        roleCMBoxRoleTab.setPromptText("Role");
-        employeeCMBoxRoleTab = new ComboBox();
-        employeeCMBoxRoleTab.setPromptText("Employee");
-        Button addEmployeeToRoleBtn = new Button("Add");
-        addEmployeeToRoleBtn.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-
-            }
-        });
-        employeeAddingToRoleHbox.getChildren().addAll(addEmployeeToRoleLabel, roleCMBoxRoleTab, employeeCMBoxRoleTab, addEmployeeToRoleBtn);
-
-        bottonRootVboxOfRole.getChildren().addAll(roleCreationHBox, employeeAddingToRoleHbox);
+        bottomRootVboxOfRole.getChildren().addAll(roleCreationHBox);
 
 
         //Construct the rolesBorderPane
@@ -414,7 +414,7 @@ public class Main extends Application {
 //        roleBorderPane.setLeft(rolesListView);
         roleBorderPane.setCenter(detailsOfRoleTable);
 //        roleBorderPane.setRight(employeesByRoleListView);
-        roleBorderPane.setBottom(bottonRootVboxOfRole);
+        roleBorderPane.setBottom(bottomRootVboxOfRole);
 
         //Construct the roleTab
         roleTab.setContent(roleBorderPane); //TODO не уверен или так собирается Tab
@@ -428,8 +428,8 @@ public class Main extends Application {
 
         //employeeBorderPane
         BorderPane employeeBorderPane = new BorderPane();
-        employeeBorderPane.setMinWidth(1150);
-        employeeBorderPane.setPrefWidth(1150);
+//        employeeBorderPane.setMinWidth(1150);
+//        employeeBorderPane.setPrefWidth(1150);
 //        employeeBorderPane.setMinHeight(716);
 //        employeeBorderPane.setPrefHeight(716);
         Label employeeLabel = new Label("Employee's detailed information");
@@ -440,60 +440,60 @@ public class Main extends Application {
 
         //employeeListView (List of employees by name)
         employeeListView = new ListView<>();
-        employeeListView.setMinWidth(200);
-        employeeListView.setPrefWidth(200);
+//        employeeListView.setMinWidth(200);
+//        employeeListView.setPrefWidth(200);
 //        employeeListView.setMinHeight(634);
 //        employeeListView.setPrefHeight(634);
 
         //employeeDetailTable TableView (Table of department's details)
         employeeDetailTable = new TableView<>();
-        employeeDetailTable.setMinWidth(950);
-        employeeDetailTable.setPrefWidth(950);
+//        employeeDetailTable.setMinWidth(950);
+//        employeeDetailTable.setPrefWidth(950);
 //        employeeDetailTable.setMinHeight(634);
 //        employeeDetailTable.setPrefHeight(634);
 
         //employee's name column
         TableColumn <Employee, String> nameOfEmployeeColumn = new TableColumn<>("Name");
-        nameOfEmployeeColumn.setMinWidth(182);
-        nameOfEmployeeColumn.setPrefWidth(182);
+//        nameOfEmployeeColumn.setMinWidth(182);
+//        nameOfEmployeeColumn.setPrefWidth(182);
         nameOfEmployeeColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
 
         //employee's preference column
         TableColumn<Employee, String> preferenceOfEmployeeColumn = new TableColumn<>("Preference");
-        preferenceOfEmployeeColumn.setMinWidth(204);
-        preferenceOfEmployeeColumn.setPrefWidth(204);
+//        preferenceOfEmployeeColumn.setMinWidth(204);
+//        preferenceOfEmployeeColumn.setPrefWidth(204);
         preferenceOfEmployeeColumn.setCellValueFactory(new PropertyValueFactory<>("preference"));
 
         //employee's type of salary column
         TableColumn<Employee,String> typeOfEmployeeColumn = new TableColumn<>("Type of salary");
-        typeOfEmployeeColumn.setMinWidth(185);
-        typeOfEmployeeColumn.setPrefWidth(185);
+//        typeOfEmployeeColumn.setMinWidth(185);
+//        typeOfEmployeeColumn.setPrefWidth(185);
         typeOfEmployeeColumn.setCellValueFactory(new PropertyValueFactory<>("type"));
 
         //employee's role column
         TableColumn<Employee,String> roleOfEmployeeColumn = new TableColumn<>("Role");
-        roleOfEmployeeColumn.setMinWidth(197);
-        roleOfEmployeeColumn.setPrefWidth(197);
+//        roleOfEmployeeColumn.setMinWidth(197);
+//        roleOfEmployeeColumn.setPrefWidth(197);
         roleOfEmployeeColumn.setCellValueFactory(new PropertyValueFactory<>("role"));
 
         //employee's start time column
         TableColumn<Employee,Integer> startTimeOfEmployeeColumn = new TableColumn<>("Start time");
-        startTimeOfEmployeeColumn.setMinWidth(92);
-        startTimeOfEmployeeColumn.setPrefWidth(92);
+//        startTimeOfEmployeeColumn.setMinWidth(92);
+//        startTimeOfEmployeeColumn.setPrefWidth(92);
         startTimeOfEmployeeColumn.setCellValueFactory(new PropertyValueFactory<>("startTime"));
 
         //employee's end time column
         TableColumn<Employee,Integer> endTimeOfEmployeeColumn = new TableColumn<>("End time");
-        endTimeOfEmployeeColumn.setMinWidth(92);
-        endTimeOfEmployeeColumn.setPrefWidth(92);
+//        endTimeOfEmployeeColumn.setMinWidth(92);
+//        endTimeOfEmployeeColumn.setPrefWidth(92);
         endTimeOfEmployeeColumn.setCellValueFactory(new PropertyValueFactory<>("endTime"));
 
         employeeDetailTable.getColumns().addAll(nameOfEmployeeColumn,preferenceOfEmployeeColumn,typeOfEmployeeColumn,roleOfEmployeeColumn,startTimeOfEmployeeColumn,endTimeOfEmployeeColumn);
 
         //HBox of creating an employee
         HBox employeeCreationHBox = new HBox();
-        employeeCreationHBox.setMinWidth(1140);
-        employeeCreationHBox.setPrefWidth(1140);
+//        employeeCreationHBox.setMinWidth(1140);
+//        employeeCreationHBox.setPrefWidth(1140);
 //        employeeCreationHBox.setMinHeight(45);
 //        employeeCreationHBox.setPrefHeight(45);
         employeeCreationHBox.setSpacing(10.0);
