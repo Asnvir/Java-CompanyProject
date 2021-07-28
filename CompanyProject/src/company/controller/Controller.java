@@ -24,9 +24,11 @@ public class Controller {
 
     public List<Role> createRole(TextField nameOfRoleTextField, TextField startTimeOfRoleTextField, CheckBox changeableTimeOfRoleChckBox) throws IllegalNameException, IllegalTimeException {
         String name = nameOfRoleTextField.getText();
-        if (!CompanyUtil.isNameCorrect(name)) throw new IllegalNameException("\""+name + "\" is illegal. Name must contain letters only!");
+        if (!CompanyUtil.isNameCorrect(name))
+            throw new IllegalNameException("\"" + name + "\" is illegal. Name must contain english letters only!");
         int startTime = Integer.parseInt(startTimeOfRoleTextField.getText());
-        if (!CompanyUtil.isTimeCorrect(startTime)) throw new IllegalTimeException("\""+startTime + "\" is illegal. Start time must be in 0..23");
+        if (!CompanyUtil.isTimeCorrect(startTime))
+            throw new IllegalTimeException("\"" + startTime + "\" is illegal. Start time must be in 0..23");
         boolean isChangeableTime = changeableTimeOfRoleChckBox.isSelected();
         Role role;
         if (isChangeableTime) {
@@ -40,9 +42,11 @@ public class Controller {
 
     public List<Department> createDepartment(TextField nameOfDepartmentTextField, TextField startTimeOfDepartmentTextField, CheckBox fixedTimeOfDepartmentChckBox, CheckBox synchronisableDepartmentChckBox, CheckBox homeDepartmentChckBox) throws IllegalNameException, IllegalTimeException {
         String name = nameOfDepartmentTextField.getText();
-        if (!CompanyUtil.isNameCorrect(name)) throw new IllegalNameException("\"" + name + "\" is incorrect. Department's name must contain letters only!");
+        if (!CompanyUtil.isNameCorrect(name))
+            throw new IllegalNameException("\"" + name + "\" is incorrect. Department's name must contain english letters only!");
         int startTime = Integer.parseInt(startTimeOfDepartmentTextField.getText());
-        if (!CompanyUtil.isTimeCorrect(startTime)) throw new IllegalTimeException("\"" + startTime + "\" is incorrect. Time must be in 0..23");
+        if (!CompanyUtil.isTimeCorrect(startTime))
+            throw new IllegalTimeException("\"" + startTime + "\" is incorrect. Time must be in range 0-23 hours");
         boolean isFixedTime = fixedTimeOfDepartmentChckBox.isSelected();
         boolean isSynchronisable = synchronisableDepartmentChckBox.isSelected();
         boolean isHomeAllowed = homeDepartmentChckBox.isSelected();
@@ -50,4 +54,9 @@ public class Controller {
         model.add(department);
         return model.getDepartments();
     }
+
+//    public List<Department> getListOfDepartments() throws NullPointerException {
+//        if (model.getDepartments() == null) throw new NullPointerException("The are no departments in company yet.");
+//        return model.getDepartments();
+//    }
 }

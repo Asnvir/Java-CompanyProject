@@ -58,6 +58,7 @@ public class CompanyView {
     private ComboBox<String> preferenceOfEmployeeCMbox;
     private ComboBox<String> typeOfSalaryCMbox;
     private ComboBox<Role> roleOfEmployeeCMbox;
+    private ComboBox<Department> departamentOfEmployeeCMbox;
     private TextField startTimeOfEmployeeTextField;
     private TextField endTimeOfEmployeeTextField;
 
@@ -234,6 +235,8 @@ public class CompanyView {
                 try {
                     List<Department> departments = controller.createDepartment(nameOfDepartmentTextField, startTimeOfDepartmentTextField, fixedTimeOfDepartmentChckBox, synchronisableDepartmentChckBox, homeAllowedChckBox);
                     departmentDetailTable.setItems(FXCollections.observableList(departments));
+                    departmentListView.setItems(FXCollections.observableList(departments));
+                    departamentOfEmployeeCMbox.setItems(FXCollections.observableList(departments));
 
                 } catch (NumberFormatException e) {
                     Alert alert = new Alert(Alert.AlertType.ERROR, "Incorrect start/end time");
@@ -309,7 +312,7 @@ public class CompanyView {
 //       rolesBorderPane.setPrefHeight(716);
         Label rolesLabel = new Label("Role's detailed information");
         rolesLabel.setFont(new Font(18));
-        BorderPane.setAlignment(rolesLabel, Pos.CENTER);  //TODO rolesBorderPane.setAlignment или BorderPane.setAlignment
+        BorderPane.setAlignment(rolesLabel, Pos.CENTER);
 
         //rolesListView ( List of roles by names)
 //        rolesListView = new ListView<>();
@@ -406,6 +409,8 @@ public class CompanyView {
                     detailsOfRoleTable.setItems(FXCollections.observableList(roles));
                     roleCMBoxDepartTab.setItems(FXCollections.observableList(roles));
                     roleOfEmployeeCMbox.setItems(FXCollections.observableList(roles));
+                    roleOfEmployeeCMbox.setItems(FXCollections.observableList(roles));
+
                 } catch (NumberFormatException e) {
                     Alert alert = new Alert(Alert.AlertType.ERROR, "Incorrect start/end time");
                     alert.setTitle("Error");
@@ -457,7 +462,7 @@ public class CompanyView {
         roleBorderPane.setBottom(bottomRootVboxOfRole);
 
         //Construct the roleTab
-        roleTab.setContent(roleBorderPane); //TODO не уверен или так собирается Tab
+        roleTab.setContent(roleBorderPane);
 
 //End of Role Tab
 
@@ -480,6 +485,7 @@ public class CompanyView {
 
         //employeeListView (List of departments by name)
         departmentListView = new ListView<>();
+//        departmentListView.setItems(FXCollections.observableList(controller.getListOfDepartments()));
 //        employeeListView.setMinWidth(200);
 //        employeeListView.setPrefWidth(200);
 //        employeeListView.setMinHeight(634);
@@ -549,12 +555,25 @@ public class CompanyView {
         typeOfSalaryCMbox = new ComboBox<>();
         typeOfSalaryCMbox.setPromptText("Type of salary");
         typeOfSalaryCMbox.setItems(FXCollections.observableArrayList("Base salary", "Base plus %", "Hourly"));
-        startTimeOfEmployeeTextField = new TextField();
         roleOfEmployeeCMbox = new ComboBox<>();
         roleOfEmployeeCMbox.setPromptText("Role");
+        departamentOfEmployeeCMbox = new ComboBox<>();
+        departamentOfEmployeeCMbox.setPromptText("Departament");
+        startTimeOfEmployeeTextField = new TextField();
         startTimeOfEmployeeTextField.setPromptText("Start time");
         endTimeOfEmployeeTextField = new TextField();
         endTimeOfEmployeeTextField.setPromptText("End Time");
+        endTimeOfEmployeeTextField.setEditable(false);
+        startTimeOfEmployeeTextField.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                try {
+                    int v = Integer.parseInt(newValue) + 9;
+                    endTimeOfEmployeeTextField.setText(CompanyUtil.convertTime(v));
+                } catch (NumberFormatException ignored) {
+                }
+            }
+        });
         Button createEmployeeBtn = new Button("Create");
         createEmployeeBtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -563,7 +582,7 @@ public class CompanyView {
             }
         });
 
-        employeeCreationHBox.getChildren().addAll(newEmployeeLabel, nameOfEmployeeTextField, preferenceOfEmployeeCMbox, typeOfSalaryCMbox, roleOfEmployeeCMbox, startTimeOfEmployeeTextField, endTimeOfEmployeeTextField, createEmployeeBtn);
+        employeeCreationHBox.getChildren().addAll(newEmployeeLabel, nameOfEmployeeTextField, preferenceOfEmployeeCMbox, typeOfSalaryCMbox, roleOfEmployeeCMbox,departamentOfEmployeeCMbox, startTimeOfEmployeeTextField, endTimeOfEmployeeTextField, createEmployeeBtn);
 
         //Construct the employeeBorderPane
         employeeBorderPane.setTop(employeeLabel);
@@ -593,4 +612,7 @@ public class CompanyView {
         primaryStage.setScene(new Scene(rootPane, 1150, 800));
         primaryStage.show();
     }
+//End of constructing the root border pane - rootTabPane
+
+
 }

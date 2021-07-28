@@ -5,7 +5,7 @@ import java.util.regex.Pattern;
 public class CompanyUtil {
     public static String convertTime(int time) {
         if (time < 24) return String.valueOf(time);
-        else return time - 24 +" (+1)";
+        else return time - 24 +" (+1 day)";
     }
 
     public static boolean isNameCorrect(String name) {

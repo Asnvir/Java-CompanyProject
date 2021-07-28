@@ -43,7 +43,7 @@ public class Department implements DepartmentInterface {
     }
 
     public String getEnd() {
-        return CompanyUtil.convertTime(time.getStartTime()+9);
+        return CompanyUtil.convertTime(time.getStartTime() + 9);
     }
 
     @Override
@@ -98,7 +98,9 @@ public class Department implements DepartmentInterface {
         roles.add(role);
     }
 
-    //    TODO if (deaprtament isFixedTime) {
-//
+    public String toString() {
+        return getName();
+    }
+
 
 }
