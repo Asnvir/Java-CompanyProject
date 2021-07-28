@@ -1,6 +1,5 @@
 package company.controller;
 
-import company.Main;
 import company.model.Company;
 import company.model.Department;
 import company.model.WorkingTime;
@@ -16,12 +15,11 @@ import javafx.scene.control.TextField;
 import java.util.List;
 
 public class Controller {
-    private Main view;
-    private Company company;
 
-    public Controller(Main view) {
-        company = new Company();
-        this.view = view;
+    private Company model;
+
+    public Controller(Company company) {
+        model = company;
     }
 
     public List<Role> createRole(TextField nameOfRoleTextField, TextField startTimeOfRoleTextField, CheckBox changeableTimeOfRoleChckBox) throws IllegalNameException, IllegalTimeException {
@@ -36,8 +34,8 @@ public class Controller {
         } else {
             role = new FixedTimeRole(name, new WorkingTime(startTime));
         }
-        company.addRole(role);
-        return company.getRoles();
+        model.addRole(role);
+        return model.getRoles();
     }
 
     public List<Department> createDepartment(TextField nameOfDepartmentTextField, TextField startTimeOfDepartmentTextField, CheckBox fixedTimeOfDepartmentChckBox, CheckBox synchronisableDepartmentChckBox, CheckBox homeDepartmentChckBox) throws IllegalNameException, IllegalTimeException {
@@ -49,7 +47,7 @@ public class Controller {
         boolean isSynchronisable = synchronisableDepartmentChckBox.isSelected();
         boolean isHomeAllowed = homeDepartmentChckBox.isSelected();
         Department department = new Department(name, new WorkingTime(startTime), isSynchronisable, isFixedTime, isHomeAllowed);
-        company.add(department);
-        return company.getDepartments();
+        model.add(department);
+        return model.getDepartments();
     }
 }
